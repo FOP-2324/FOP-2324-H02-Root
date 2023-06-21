@@ -3,9 +3,6 @@ package h02;
 import fopbot.Robot;
 import fopbot.RobotFamily;
 import fopbot.World;
-
-import javax.naming.ldap.Control;
-
 import static fopbot.Direction.LEFT;
 
 /**
@@ -30,7 +27,6 @@ public class Main {
 
         World.setSize(numberOfColumns,numberOfRows);
         World.setVisible(true);
-        World.setDelay(300);
         World.placeBlock(0,0);
         World.placeHorizontalWall(0,0);
         World.placeVerticalWall(0,0);
@@ -38,6 +34,18 @@ public class Main {
         cc.placeCoinsInWorld(coins);
         Robot[] scanRobots = cc.initScanRobots();
         cc.reverseRobotArray(scanRobots);
-        cc.initCleaningRobots();
+        boolean[][] coinPos = cc.scanWorld(scanRobots);
+        // printBooleanArray(coinPos);
+        Robot[] cleanRobots = cc.initCleaningRobots();
+        cc.moveCleanRobots(coinPos, cleanRobots);
+    }
+
+    public static void printBooleanArray(boolean[][] bool) {
+        for(int i = 0; i < bool.length; i++) {
+            for(int j = 0; j < bool[i].length; j++) {
+                System.out.print(bool[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
