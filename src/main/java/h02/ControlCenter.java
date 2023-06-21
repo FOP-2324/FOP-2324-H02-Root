@@ -31,16 +31,16 @@ public class ControlCenter {
      *
      * @return
      */
-    public boolean[][] scanWorld(Robot[] scanRobots) {
+    public boolean[][] scanWorld(Robot[] scanRobot) {
         boolean[][] positionsOfCoinsInWorld = new boolean[this.NUMBER_OF_ROWS][this.NUMBER_OF_COLUMNS];
-        for(int i = 0; i < scanRobots.length; i++) {
-            if(scanRobots[i].isFrontClear()) {
-                if(scanRobots[i].isOnACoin()) {
-                    int x = scanRobots[i].getX();
-                    int y = scanRobots[i].getY();
+        for(int i = 0; i < scanRobot.length; i++) {
+            if(scanRobot[i].isFrontClear()) {
+                if(scanRobot[i].isOnACoin()) {
+                    int x = scanRobot[i].getX();
+                    int y = scanRobot[i].getY();
                     positionsOfCoinsInWorld[x][y] = true;
                 }
-                scanRobots[i].move();
+                scanRobot[i].move();
             }
         }
         return positionsOfCoinsInWorld;
@@ -50,12 +50,12 @@ public class ControlCenter {
      *
      * @return
      */
-    public ScanRobots[] initScanRobots() {
-        ScanRobots[] scanRobots = new ScanRobots[World.getWidth()-1];
+    public ScanRobot[] initScanRobots() {
+        ScanRobot[] scanRobot = new ScanRobot[World.getWidth()-1];
         for(int i = 0; i < World.getWidth()-1; i++) {
-            scanRobots[i] = new ScanRobots(i+1, 0, Direction.UP, 0);
+            scanRobot[i] = new ScanRobot(i+1, 0, Direction.UP, 0);
         }
-        return scanRobots;
+        return scanRobot;
     }
     /**
      *

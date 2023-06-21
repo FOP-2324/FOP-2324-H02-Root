@@ -4,23 +4,25 @@ import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.RobotFamily;
 
-public class CleanRobot extends Robot {
-    public CleanRobot(int x, int y, Direction direction, int numberOfCoins) {
-        super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_BLACK);
+public class ScanRobot extends Robot {
+
+    public ScanRobot(int x, int y, Direction direction, int numberOfCoins) {
+        super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_RED);
     }
 
     @Override
-    public boolean isOnACoin() {
-        throw new UnsupportedOperationException("This robot is unable check for coins!");
+    public void pickCoin() {
+        throw new UnsupportedOperationException("This robot is unable to pick up coins!");
     }
 
     @Override
     public String toString() {
-        return "CleanRobot{"
+        return "ScanRobot{"
             + "id='" + getId() + '\''
             + ", at=[" + getX() + '/' + getY()
             + "], numberOfCoins=" + getNumberOfCoins()
             + ", direction=" + getDirection()
             + '}';
     }
+
 }
