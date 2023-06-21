@@ -23,7 +23,7 @@ public class Main {
         coins[8][1] = 1;
         coins[9][2] = 5;
 
-        ControlCenter cc = new ControlCenter(numberOfRows, numberOfColumns);
+        ControlCenter cc = new ControlCenter();
 
         World.setSize(numberOfColumns,numberOfRows);
         World.setVisible(true);
@@ -32,12 +32,7 @@ public class Main {
         World.placeVerticalWall(0,0);
 
         cc.placeCoinsInWorld(coins);
-        Robot[] scanRobots = cc.initScanRobots();
-        cc.reverseRobotArray(scanRobots);
-        boolean[][] coinPos = cc.scanWorld(scanRobots);
-        // printBooleanArray(coinPos);
-        Robot[] cleanRobots = cc.initCleaningRobots();
-        cc.moveCleanRobots(coinPos, cleanRobots);
+        cc.cleanWorld();
     }
 
     public static void printBooleanArray(boolean[][] bool) {

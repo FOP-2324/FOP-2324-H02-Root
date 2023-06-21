@@ -6,15 +6,6 @@ import fopbot.World;
 
 public class ControlCenter {
 
-    public final int NUMBER_OF_ROWS;
-    public final int NUMBER_OF_COLUMNS;
-
-    public ControlCenter(int numberOfRows, int numberOfColumns) {
-        this.NUMBER_OF_COLUMNS = numberOfColumns;
-        this.NUMBER_OF_ROWS = numberOfRows;
-    }
-
-
     private void printRobotsArray(Robot[] robots) {
         for(int i = 0; i < robots.length; i++) {
             System.out.println(robots[i]);
@@ -47,7 +38,6 @@ public class ControlCenter {
                 endOfWorldReached &= scanRobots[i].isFrontClear();
             }
         }
-        spinAllRobots(scanRobots);
         return positionsOfCoinsInWorld;
     }
 
@@ -66,7 +56,7 @@ public class ControlCenter {
      *
      * @return
      */
-    public Robot[] initCleaningRobots() {
+    public CleanRobot[] initCleaningRobots() {
         CleanRobot[] cleanRobots = new CleanRobot[World.getHeight()-1];
         for(int i = 0; i < World.getHeight()-1; i++) {
             cleanRobots[i] = new CleanRobot(0, i+1, Direction.RIGHT, 0);
@@ -108,7 +98,6 @@ public class ControlCenter {
                 endOfWorldNotReached &= cleaningRobots[i].isFrontClear();
             }
         }
-        this.spinAllRobots(cleaningRobots);
     }
 
     public void replaceNullRobots(Robot[] robots) {
@@ -123,7 +112,32 @@ public class ControlCenter {
         }
     }
 
-    public void cleanWorld(boolean[][] positionsOfCoins, Robot[] cleanRobots) {
+    public boolean allCoinsGathered(boolean[][] coins) {
+        boolean allCoinsGathered = true;
+        for(int i = 0; i < coins.length; i++) {
+            for(int j = 0; j < coins[i].length; j++) {
+                if(coins[i][j]) {
+                    allCoinsGathered = false;
+                }
+            }
+        }
+        return allCoinsGathered;
+    }
 
+    public void cleanWorld() {
+        ScanRobot[] scanRobots = initScanRobots();
+        CleanRobot[] cleanRobots = initCleaningRobots();
+        boolean coinsGathered = false;
+        while(!coinsGathered) {
+            boolean[][] coinsInWorld = scanWorld(scanRobots);
+            spinAllRobots(scanRobots);
+            moveCleanRobots(coinsInWorld, cleanRobots);
+            spinAllRobots(cleanRobots);
+            coinsInWorld = scanWorld(scanRobots);
+            spinAllRobots(scanRobots);
+            moveCleanRobots(coinsInWorld, cleanRobots);
+            spinAllRobots(cleanRobots);
+            coinsGathered = allCoinsGathered(coinsInWorld);
+        }
     }
 }
