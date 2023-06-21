@@ -12,7 +12,17 @@ public class ScanRobot extends Robot {
 
     @Override
     public void pickCoin() {
-        throw new UnsupportedOperationException("Scan Robots can not pick up coins");
+        throw new UnsupportedOperationException("This robot is unable to pick up coins!");
+    }
+
+    @Override
+    public String toString() {
+        return "ScanRobot{"
+            + "id='" + getId() + '\''
+            + ", at=[" + getX() + '/' + getY()
+            + "], numberOfCoins=" + getNumberOfCoins()
+            + ", direction=" + getDirection()
+            + '}';
     }
 
 }

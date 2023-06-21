@@ -6,11 +6,21 @@ import fopbot.RobotFamily;
 
 public class CleanRobot extends Robot {
     public CleanRobot(int x, int y, Direction direction, int numberOfCoins) {
-        super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_ORANGE);
+        super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_BLACK);
     }
 
     @Override
     public boolean isOnACoin() {
-        throw new UnsupportedOperationException("CleanRobots can not check if they are on a coin");
+        throw new UnsupportedOperationException("This robot is unable check for coins!");
+    }
+
+    @Override
+    public String toString() {
+        return "CleanRobot{"
+            + "id='" + getId() + '\''
+            + ", at=[" + getX() + '/' + getY()
+            + "], numberOfCoins=" + getNumberOfCoins()
+            + ", direction=" + getDirection()
+            + '}';
     }
 }
