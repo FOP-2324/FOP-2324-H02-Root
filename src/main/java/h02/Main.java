@@ -21,7 +21,7 @@ public class Main {
         int[][] coins = new int[numberOfColumns][numberOfRows];
         coins[7][4] = 1;
         coins[8][1] = 1;
-        coins[9][2] = 5;
+        coins[9][2] = 2;
 
         ControlCenter cc = new ControlCenter();
 

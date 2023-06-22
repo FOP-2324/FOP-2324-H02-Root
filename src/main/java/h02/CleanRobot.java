@@ -23,4 +23,5 @@ public class CleanRobot extends Robot {
             + ", direction=" + getDirection()
             + '}';
     }
+
 }
