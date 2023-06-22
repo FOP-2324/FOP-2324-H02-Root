@@ -165,8 +165,7 @@ public class ControlCenter {
                 int y = robots[i].getY();
                 int numberOfCoins = robots[i].getNumberOfCoins();
                 Direction direction = robots[i].getDirection();
-                robots[i] = null;
-                if(robots[i] instanceof  CleanRobot) {
+                if(robots[i] instanceof CleanRobot) {
                     robots[i] = new CleanRobot(x,y,direction,numberOfCoins);
                 }
                 else {
