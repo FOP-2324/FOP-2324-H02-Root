@@ -1,9 +1,6 @@
 package h02;
 
-import fopbot.Robot;
-import fopbot.RobotFamily;
 import fopbot.World;
-import static fopbot.Direction.LEFT;
 
 /**
  * Main entry point in executing the program.
@@ -25,37 +22,29 @@ public class Main {
 
         ControlCenter controlCenter = new ControlCenter();
 
-        World.setSize(numberOfColumns,numberOfRows);
+        World.setSize(numberOfColumns, numberOfRows);
         World.setVisible(true);
         World.setDelay(10);
-        World.placeBlock(0,0);
-        World.placeHorizontalWall(0,0);
-        World.placeVerticalWall(0,0);
+        World.placeBlock(0, 0);
+        World.placeHorizontalWall(0, 0);
+        World.placeVerticalWall(0, 0);
 
         placeCoinsInWorld(coins);
         controlCenter.cleanWorld();
     }
 
     /**
+     * Places coins in the world according to the provided array
      *
-     * @param coins
+     * @param coins An array detailing how many coins to place in what position
      */
     public static void placeCoinsInWorld(int[][] coins) {
-        for(int i = 0; i < coins.length; i++) {
-            for(int j = 0; j < coins[i].length; j++) {
-                if(coins[i][j] != 0) {
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = 0; j < coins[i].length; j++) {
+                if (coins[i][j] != 0) {
                     World.putCoins(i, j, coins[i][j]);
                 }
             }
-        }
-    }
-
-    public static void printBooleanArray(boolean[][] bool) {
-        for(int i = 0; i < bool.length; i++) {
-            for(int j = 0; j < bool[i].length; j++) {
-                System.out.print(bool[i][j] + " ");
-            }
-            System.out.println();
         }
     }
 }
