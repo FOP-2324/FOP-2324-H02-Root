@@ -23,7 +23,7 @@ public class Main {
         coins[8][1] = 1;
         coins[9][2] = 2;
 
-        ControlCenter cc = new ControlCenter();
+        ControlCenter controlCenter = new ControlCenter();
 
         World.setSize(numberOfColumns,numberOfRows);
         World.setVisible(true);
@@ -31,8 +31,22 @@ public class Main {
         World.placeHorizontalWall(0,0);
         World.placeVerticalWall(0,0);
 
-        cc.placeCoinsInWorld(coins);
-        cc.cleanWorld();
+        placeCoinsInWorld(coins);
+        controlCenter.cleanWorld();
+    }
+
+    /**
+     *
+     * @param coins
+     */
+    public static void placeCoinsInWorld(int[][] coins) {
+        for(int i = 0; i < coins.length; i++) {
+            for(int j = 0; j < coins[i].length; j++) {
+                if(coins[i][j] != 0) {
+                    World.putCoins(i, j, coins[i][j]);
+                }
+            }
+        }
     }
 
     public static void printBooleanArray(boolean[][] bool) {
