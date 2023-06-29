@@ -27,6 +27,7 @@ public class Main {
 
         World.setSize(numberOfColumns,numberOfRows);
         World.setVisible(true);
+        World.setDelay(10);
         World.placeBlock(0,0);
         World.placeHorizontalWall(0,0);
         World.placeVerticalWall(0,0);

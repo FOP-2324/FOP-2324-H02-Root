@@ -2,7 +2,6 @@ package h02;
 
 import fopbot.Direction;
 import fopbot.Robot;
-import fopbot.RobotFamily;
 import fopbot.World;
 
 public class ControlCenter {
@@ -45,25 +44,24 @@ public class ControlCenter {
 
     /**
      *
-     * @param robot
+     * @param robots
      */
-    private void rotateRobots(Robot[] robot) {
-        for(int i = 0; i < robot.length; i++) {
-            robot[i].turnLeft();
-            robot[i].turnLeft();
+    public void rotateRobots(Robot[] robots) {
+        for (Robot robot : robots) {
+            robot.turnLeft();
+            robot.turnLeft();
+            checkForDamage(robot);
         }
     }
 
     /**
      *
-     * @param robots
+     * @param robot
      */
-    public void checkForDamage(Robot[] robots) {
+    public void checkForDamage(Robot robot) {
         double p = 0.5;
-        for(int i = 0; i < robots.length; i++) {
-            if(Math.random() > p) {
-                robots[i].turnOff();
-            }
+        if(Math.random() > p) {
+            robot.turnOff();
         }
     }
 
@@ -78,15 +76,23 @@ public class ControlCenter {
                 int y = robots[i].getY();
                 int numberOfCoins = robots[i].getNumberOfCoins();
                 Direction direction = robots[i].getDirection();
-                if(robots[i] instanceof CleanRobot) {
-                    robots[i] = new CleanRobot(x,y,direction,numberOfCoins);
-                }
-                else {
+                if(isScanRobotArray(robots)) {
                     robots[i] = new ScanRobot(x,y,direction,numberOfCoins);
                 }
-
+                else {
+                    robots[i] = new CleanRobot(x,y,direction,numberOfCoins);
+                }
             }
         }
+    }
+
+    /**
+     *
+     * @param robots
+     * @return
+     */
+    public boolean isScanRobotArray(Robot[] robots) {
+        return robots instanceof ScanRobot[];
     }
 
     /**
@@ -94,93 +100,73 @@ public class ControlCenter {
      * @param robots
      */
     public void spinRobots(Robot[] robots) {
-
+        invertRobots(robots);
+        rotateRobots(robots);
+        replaceBrokenRobots(robots);
     }
 
     /**
      *
      * @param robots
      */
-    private void returnRobots(Robot[] robots) {
-        boolean endOfWorldReached = true;
-        while(endOfWorldReached) {
-            for(int i = 0; i < robots.length; i++) {
-                if(robots[i].isFrontClear()) {
-                    robots[i].move();
-                }
-                endOfWorldReached &= robots[i].isFrontClear();
+    public void returnRobots(Robot[] robots) {
+        for (Robot robot :robots) {
+            while (robot.isFrontClear()) {
+                robot.move();
             }
         }
     }
-
 
     /**
      *
      * @param scanRobots
      * @return
      */
-    public boolean[][] scanWorld(Robot[] scanRobots) {
+    public boolean[][] scanWorld(ScanRobot[] scanRobots) {
         boolean[][] positionsOfCoinsInWorld = new boolean[World.getWidth()][World.getHeight()];
         boolean endOfWorldReached = true;
         while(endOfWorldReached) {
-            for(int i = 0; i < scanRobots.length; i++) {
-                if(scanRobots[i].isFrontClear()) {
-                    if(scanRobots[i].isOnACoin()) {
-                        int x = scanRobots[i].getX();
-                        int y = scanRobots[i].getY();
+            for (ScanRobot scanRobot : scanRobots) {
+                if (scanRobot.isFrontClear()) {
+                    if (scanRobot.isOnACoin()) {
+                        int x = scanRobot.getX();
+                        int y = scanRobot.getY();
                         positionsOfCoinsInWorld[x][y] = true;
                     }
-                    scanRobots[i].move();
+                    scanRobot.move();
                 }
-                endOfWorldReached &= scanRobots[i].isFrontClear();
+                endOfWorldReached &= scanRobot.isFrontClear();
             }
         }
-        rotateRobots(scanRobots);
+        spinRobots(scanRobots);
         returnRobots(scanRobots);
-        rotateRobots(scanRobots);
+        spinRobots(scanRobots);
         return positionsOfCoinsInWorld;
     }
 
     /**
      *
      * @param positionsOfCoins
-     * @param cleaningRobots
+     * @param cleanRobots
      */
-    public void moveCleanRobots(boolean[][] positionsOfCoins, Robot[] cleaningRobots) {
+    public void moveCleanRobots(CleanRobot[] cleanRobots, boolean[][] positionsOfCoins) {
         boolean endOfWorldNotReached = true;
         while(endOfWorldNotReached) {
-            for(int i = 0; i < cleaningRobots.length; i++) {
-                if(cleaningRobots[i].isFrontClear()) {
-                    int x = cleaningRobots[i].getX();
-                    int y = cleaningRobots[i].getY();
-                    if(positionsOfCoins[x][y]) {
-                        cleaningRobots[i].pickCoin();
+            for (CleanRobot cleanRobot : cleanRobots) {
+                if (cleanRobot.isFrontClear()) {
+                    int x = cleanRobot.getX();
+                    int y = cleanRobot.getY();
+                    if (positionsOfCoins[x][y]) {
+                        cleanRobot.pickCoin();
                     }
-                    cleaningRobots[i].move();
+                    cleanRobot.move();
                 }
-                endOfWorldNotReached &= cleaningRobots[i].isFrontClear();
+                endOfWorldNotReached &= cleanRobot.isFrontClear();
             }
         }
-        rotateRobots(cleaningRobots);
-        returnRobots(cleaningRobots);
-        rotateRobots(cleaningRobots);
-    }
-
-    /**
-     *
-     * @param coins
-     * @return
-     */
-    public boolean allCoinsGathered(boolean[][] coins) {
-        boolean allCoinsGathered = true;
-        for(int i = 0; i < coins.length; i++) {
-            for(int j = 0; j < coins[i].length; j++) {
-                if(coins[i][j]) {
-                    allCoinsGathered = false;
-                }
-            }
-        }
-        return allCoinsGathered;
+        spinRobots(cleanRobots);
+        returnRobots(cleanRobots);
+        spinRobots(cleanRobots);
     }
 
     /**
@@ -192,18 +178,30 @@ public class ControlCenter {
         boolean coinsGathered = false;
         while(!coinsGathered) {
             boolean[][] coinsInWorld = scanWorld(scanRobots);
-            invertRobots(scanRobots);
-            checkForDamage(scanRobots);
-            replaceBrokenRobots(scanRobots);
             if(allCoinsGathered(coinsInWorld)) {
                 break;
             }
-            moveCleanRobots(coinsInWorld, cleanRobots);
-            invertRobots(cleanRobots);
-            checkForDamage(cleanRobots);
-            replaceBrokenRobots(cleanRobots);
+            moveCleanRobots(cleanRobots, coinsInWorld);
             coinsGathered = allCoinsGathered(coinsInWorld);
         }
         System.out.println("Finished");
+    }
+
+    /**
+     *
+     * @param coins
+     * @return
+     */
+    public boolean allCoinsGathered(boolean[][] coins) {
+        boolean allCoinsGathered = true;
+        for (boolean[] coin : coins) {
+            for (boolean b : coin) {
+                if (b) {
+                    allCoinsGathered = false;
+                    break;
+                }
+            }
+        }
+        return allCoinsGathered;
     }
 }
