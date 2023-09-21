@@ -137,15 +137,18 @@ public class ControlCenter {
         boolean endOfWorldReached = true;
         while (endOfWorldReached) {
             for (ScanRobot scanRobot : scanRobots) {
-                if (scanRobot.isFrontClear()) {
-                    if (scanRobot.isOnACoin()) {
-                        int x = scanRobot.getX();
-                        int y = scanRobot.getY();
-                        positionsOfCoinsInWorld[x][y] = true;
-                    }
+                if (scanRobot.isOnACoin()) {
+                    int x = scanRobot.getX();
+                    int y = scanRobot.getY();
+                    positionsOfCoinsInWorld[x][y] = true;
+                }
+
+                boolean frontClear = scanRobot.isFrontClear();
+                if (frontClear) {
                     scanRobot.move();
                 }
-                endOfWorldReached &= scanRobot.isFrontClear();
+
+                endOfWorldReached &= frontClear;
             }
         }
         spinRobots(scanRobots);
@@ -164,15 +167,18 @@ public class ControlCenter {
         boolean endOfWorldNotReached = true;
         while (endOfWorldNotReached) {
             for (CleanRobot cleanRobot : cleanRobots) {
-                if (cleanRobot.isFrontClear()) {
-                    int x = cleanRobot.getX();
-                    int y = cleanRobot.getY();
-                    if (positionsOfCoins[x][y]) {
-                        cleanRobot.pickCoin();
-                    }
+                int x = cleanRobot.getX();
+                int y = cleanRobot.getY();
+                if (positionsOfCoins[x][y]) {
+                    cleanRobot.pickCoin();
+                }
+
+                boolean frontClear = cleanRobot.isFrontClear();
+                if (frontClear) {
                     cleanRobot.move();
                 }
-                endOfWorldNotReached &= cleanRobot.isFrontClear();
+
+                endOfWorldNotReached &= frontClear;
             }
         }
         spinRobots(cleanRobots);
