@@ -134,8 +134,9 @@ public class ControlCenter {
      */
     public boolean[][] scanWorld(ScanRobot[] scanRobots) {
         boolean[][] positionsOfCoinsInWorld = new boolean[World.getWidth()][World.getHeight()];
-        boolean endOfWorldReached = true;
-        while (endOfWorldReached) {
+        boolean allAtEndOfWorld = false;
+        while (!allAtEndOfWorld) {
+            allAtEndOfWorld = true;
             for (ScanRobot scanRobot : scanRobots) {
                 if (scanRobot.isOnACoin()) {
                     int x = scanRobot.getX();
@@ -143,12 +144,10 @@ public class ControlCenter {
                     positionsOfCoinsInWorld[x][y] = true;
                 }
 
-                boolean frontClear = scanRobot.isFrontClear();
-                if (frontClear) {
+                if (scanRobot.isFrontClear()) {
                     scanRobot.move();
+                    allAtEndOfWorld = false;
                 }
-
-                endOfWorldReached &= frontClear;
             }
         }
         spinRobots(scanRobots);
@@ -164,8 +163,9 @@ public class ControlCenter {
      * @param cleanRobots      An array containing the {@linkplain CleanRobot CleanRobots} to collect the coins with.
      */
     public void moveCleanRobots(CleanRobot[] cleanRobots, boolean[][] positionsOfCoins) {
-        boolean endOfWorldNotReached = true;
-        while (endOfWorldNotReached) {
+        boolean allAtEndOfWorld = false;
+        while (!allAtEndOfWorld) {
+            allAtEndOfWorld = true;
             for (CleanRobot cleanRobot : cleanRobots) {
                 int x = cleanRobot.getX();
                 int y = cleanRobot.getY();
@@ -173,12 +173,10 @@ public class ControlCenter {
                     cleanRobot.pickCoin();
                 }
 
-                boolean frontClear = cleanRobot.isFrontClear();
-                if (frontClear) {
+                if (cleanRobot.isFrontClear()) {
                     cleanRobot.move();
+                    allAtEndOfWorld = false;
                 }
-
-                endOfWorldNotReached &= frontClear;
             }
         }
         spinRobots(cleanRobots);
