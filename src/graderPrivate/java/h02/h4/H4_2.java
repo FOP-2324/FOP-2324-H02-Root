@@ -3,12 +3,10 @@ package h02.h4;
 import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.Robot;
-import fopbot.Transition;
 import fopbot.World;
-import h02.CleanRobot;
 import h02.ControlCenter;
 import h02.IWorldSetup;
-import h02.TestUtils;
+import h02.ScanRobot;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -24,38 +22,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 @TestForSubmission
-public class H4_3 implements IWorldSetup {
+public class H4_2 implements IWorldSetup {
 
     public static final Map<String, Function<JsonNode, ?>> CUSTOM_CONVERTERS = new HashMap<>(H4Utils.CUSTOM_CONVERTERS);
     static {
-        CUSTOM_CONVERTERS.put("robots", H4Utils.robotConverter(CleanRobot.class));
+        CUSTOM_CONVERTERS.put("robots", H4Utils.robotConverter(ScanRobot.class));
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testPickedUpCoinAmountsAny(JsonParameterSet parameterSet) {
-        testPickedUpCoinAmounts(parameterSet, false);
-    }
-
-    @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testPickedUpCoinAmountsExact(JsonParameterSet parameterSet) {
-        testPickedUpCoinAmounts(parameterSet, true);
-    }
-
-    private static void testPickedUpCoinAmounts(JsonParameterSet parameterSet, boolean exact) {
+    public void testArrayDimensions(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
         World.setSize(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
+        ScanRobot[] robots = parameterSet.get("robots");
         Direction direction = parameterSet.get("direction");
-        boolean[][] expected = parameterSet.get("expected");
         int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
-
-        boolean[][] coinPositions = getCoinPositions(coins);
 
         var context = Assertions2.contextBuilder()
             .add("worldWidth", worldWidth)
@@ -64,54 +49,54 @@ public class H4_3 implements IWorldSetup {
 
         ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
 
-        Assertions2.call(
-            () -> controlCenter.moveCleanRobots(robots, coinPositions),
+        var result = Assertions2.callObject(
+            () -> controlCenter.scanWorld(robots),
             context,
             r -> "The method `returnRobots` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        for (int x = 0; x < expected.length; x++) {
-            for (int y = 0; y < expected[x].length; y++) {
-                var finalX = x;
-                var finalY = y;
+        Assertions2.assertNotNull(
+            result,
+            context,
+            r -> "The method `scanWorld` returned `null`."
+        );
 
-                var coinsOnField = TestUtils.getCoinsOnField(x, y);
+        Assertions2.assertEquals(
+            worldWidth,
+            result.length,
+            context,
+            r -> "The method `scanWorld` returned an array with the wrong width."
+        );
 
-                if (exact) {
-                    Assertions2.assertEquals(
-                        coins[x][y] - (expected[x][y] ? 1 : 0),
-                        coinsOnField,
-                        context,
-                        r -> "The coin amount at position (%d, %d) was incorrect.".formatted(finalX, finalY)
-                    );
-                } else {
-                    Assertions2.assertTrue(
-                        expected[x][y] ? coinsOnField < coins[x][y] : coinsOnField == coins[x][y],
-                        context,
-                        r -> "No coin was picked up at the position (%d, %d).".formatted(finalX, finalY)
-                    );
-                }
-            }
+        for (boolean[] columns : result) {
+            Assertions2.assertNotNull(
+                columns,
+                context,
+                r -> "The method `scanWorld` returned an array with a `null` columns."
+            );
+
+            Assertions2.assertEquals(
+                worldHeight,
+                columns.length,
+                context,
+                r -> "The method `scanWorld` returned a column array with the wrong height."
+            );
         }
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testRobotMovement(JsonParameterSet parameterSet) {
+    public void testResultArrayEntriesCorrect(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
         World.setSize(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
+        ScanRobot[] robots = parameterSet.get("robots");
         Direction direction = parameterSet.get("direction");
         int[][] coins = parameterSet.get("coins");
+        boolean[][] expected = parameterSet.get("expected");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
-
-        CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        H4Utils.Position[] startingPositions = getPositions(robots);
-        H4Utils.Position[] finalPositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
-        boolean[][] coinPositions = getCoinPositions(coins);
 
         var context = Assertions2.contextBuilder()
             .add("worldWidth", worldWidth)
@@ -120,42 +105,37 @@ public class H4_3 implements IWorldSetup {
 
         ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
 
-        Assertions2.call(
-            () -> controlCenter.moveCleanRobots(robots, coinPositions),
+        var result = Assertions2.callObject(
+            () -> controlCenter.scanWorld(robots),
             context,
             r -> "The method `returnRobots` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        for (int i = 0; i < robotsReferenceCopy.length; i++) {
-            var finalI = i;
-            var robot = robotsReferenceCopy[i];
+        Assertions2.assertNotNull(
+            result,
+            context,
+            r -> "The method `scanWorld` returned `null`."
+        );
 
-            var trace = World.getGlobalWorld().getTrace(robot);
-            var moveCount = 0;
-            var reachedEnd = false;
-            for (var transition : trace.getTransitions()) {
-                var finalPosition = finalPositions[i];
+        for (int x = 0; x < coins.length; x++) {
+            for (int y = 0; y < coins[x].length; y++) {
+                var finalX = x;
+                var finalY = y;
 
-                if (transition.robot.getX() == finalPosition.x() && transition.robot.getY() == finalPosition.y()) {
-                    reachedEnd = true;
-                    break;
+                try {
+                    Assertions2.assertEquals(
+                        expected[x][y],
+                        result[x][y],
+                        context,
+                        r -> "The method `scanWorld` returned an array with the wrong value at position (%d, %d).".formatted(finalX, finalY)
+                    );
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Assertions2.fail(
+                        context,
+                        r -> "The method `scanWorld` returned an array with the wrong dimensions."
+                    );
                 }
-
-                if (transition.action != Transition.RobotAction.MOVE)
-                    continue;
-
-                moveCount++;
             }
-
-            if (!reachedEnd)
-                Assertions2.fail(context, r -> "The robot at index %d did not reach the end of the world.".formatted(finalI));
-
-            Assertions2.assertEquals(
-                startingPositions[i].manhattanDistance(finalPositions[i]),
-                moveCount,
-                context,
-                r -> "The robot at index %d did not perform the minimal number of move actions to reach the end of the world.".formatted(finalI)
-            );
         }
     }
 
@@ -166,14 +146,13 @@ public class H4_3 implements IWorldSetup {
         int worldHeight = parameterSet.get("worldHeight");
         World.setSize(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
-        CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        ScanRobot[] robots = parameterSet.get("robots");
+        ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         Direction direction = parameterSet.get("direction");
         int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        boolean[][] coinPositions = getCoinPositions(coins);
         var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
         var secondEdgePositions = H4Utils.getEndOfWorldPositions(firstEdgePositions, Direction.values()[(direction.ordinal() + 2) % 4], worldWidth, worldHeight);
 
@@ -222,10 +201,10 @@ public class H4_3 implements IWorldSetup {
             return null;
         }).when(controlCenter).spinRobots(Mockito.any());
 
-        Assertions2.call(
-            () -> controlCenter.moveCleanRobots(robots, coinPositions),
+        var result = Assertions2.callObject(
+            () -> controlCenter.scanWorld(robots),
             context,
-            r -> "The method `moveCleanRobots` threw an exception: %s".formatted(r.cause().toString())
+            r -> "The method `scanWorld` threw an exception: %s".formatted(r.cause().toString())
         );
 
         if (invalidInvocationMessage[0] != null)
@@ -241,14 +220,13 @@ public class H4_3 implements IWorldSetup {
         int worldHeight = parameterSet.get("worldHeight");
         World.setSize(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
-        CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        ScanRobot[] robots = parameterSet.get("robots");
+        ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         Direction direction = parameterSet.get("direction");
         int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        boolean[][] coinPositions = getCoinPositions(coins);
         var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
 
         var context = Assertions2.contextBuilder()
@@ -282,10 +260,10 @@ public class H4_3 implements IWorldSetup {
             return null;
         }).when(controlCenter).returnRobots(Mockito.any());
 
-        Assertions2.call(
-            () -> controlCenter.moveCleanRobots(robots, coinPositions),
+        var result = Assertions2.callObject(
+            () -> controlCenter.scanWorld(robots),
             context,
-            r -> "The method `moveCleanRobots` threw an exception: %s".formatted(r.cause().toString())
+            r -> "The method `scanWorld` threw an exception: %s".formatted(r.cause().toString())
         );
 
         if (invalidInvocationMessage[0] != null)
@@ -294,27 +272,62 @@ public class H4_3 implements IWorldSetup {
         Mockito.verify(controlCenter).returnRobots(Mockito.same(robots));
     }
 
-    /**
-     * Converts the given coin array to a boolean array, where an entry in the result is {@code true} iff. the coin
-     * amount at the corresponding position in the given array is greater than 0.
-     *
-     * @param coins The coin array to convert
-     * @return The binarized coin array
-     */
-    private static boolean[][] getCoinPositions(int[][] coins) {
-        boolean[][] coinPositions = new boolean[coins.length][coins[0].length];
-        for (int x = 0; x < coins.length; x++) {
-            for (int y = 0; y < coins[x].length; y++) {
-                coinPositions[x][y] = coins[x][y] > 0;
-            }
-        }
-        return coinPositions;
-    }
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
+    public void testRobotsFinalPositionAndDirection(JsonParameterSet parameterSet) {
+        int worldWidth = parameterSet.get("worldWidth");
+        int worldHeight = parameterSet.get("worldHeight");
+        World.setSize(worldWidth, worldHeight);
 
-    private static H4Utils.Position[] getPositions(Robot[] robots) {
-        var positions = new H4Utils.Position[robots.length];
-        for (int i = 0; i < robots.length; i++)
-            positions[i] = new H4Utils.Position(robots[i].getX(), robots[i].getY());
-        return positions;
+        ScanRobot[] robots = parameterSet.get("robots");
+        ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        Direction direction = parameterSet.get("direction");
+        int[][] coins = parameterSet.get("coins");
+
+        H4Utils.initRobotsAndWorld(robots, direction, coins);
+
+        var finalPositions = H4Utils.getEndOfWorldPositions(
+            H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight),
+            Direction.values()[(direction.ordinal() + 2) % 4],
+            worldWidth, worldHeight
+        );
+
+        var context = Assertions2.contextBuilder()
+            .add("worldWidth", worldWidth)
+            .add("worldHeight", worldHeight)
+            .build();
+
+        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
+
+        var result = Assertions2.callObject(
+            () -> controlCenter.scanWorld(robots),
+            context,
+            r -> "The method `scanWorld` threw an exception: %s".formatted(r.cause().toString())
+        );
+
+        for (int i = 0; i < robotsReferenceCopy.length; i++) {
+            var robot = robotsReferenceCopy[i];
+            var finalI = i;
+            Assertions2.assertEquals(
+                direction,
+                robot.getDirection(),
+                context,
+                r -> "The final direction for the robot at index %d was incorrect.".formatted(finalI)
+            );
+
+            Assertions2.assertEquals(
+                finalPositions[i].x(),
+                robot.getX(),
+                context,
+                r -> "The final x-coordinate for the robot at index %d was incorrect.".formatted(finalI)
+            );
+
+            Assertions2.assertEquals(
+                finalPositions[i].y(),
+                robot.getY(),
+                context,
+                r -> "The final y-coordinate for the robot at index %d was incorrect.".formatted(finalI)
+            );
+        }
     }
 }
