@@ -4,6 +4,9 @@ import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.World;
 
+/**
+ * A class that controls the {@linkplain Robot robots} and their actions.
+ */
 public class ControlCenter {
 
     /**
