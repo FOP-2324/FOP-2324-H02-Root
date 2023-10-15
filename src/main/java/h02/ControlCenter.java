@@ -37,7 +37,7 @@ public class ControlCenter {
      *
      * @param robots The array to invert
      */
-    public void invertRobots(Robot[] robots) {
+    public void reverseRobots(Robot[] robots) {
         for (int i = robots.length; i > robots.length / 2; i--) {
             Robot tmp = robots[i - 1];
             robots[i - 1] = robots[robots.length - i];
@@ -103,12 +103,12 @@ public class ControlCenter {
     }
 
     /**
-     * Calls {@link #invertRobots}, {@link #rotateRobots} and {@link #replaceBrokenRobots} in that order, with the given array as the argument
+     * Calls {@link #reverseRobots}, {@link #rotateRobots} and {@link #replaceBrokenRobots} in that order, with the given array as the argument
      *
      * @param robots The array to perform the aforementioned actions on
      */
     public void spinRobots(Robot[] robots) {
-        invertRobots(robots);
+        reverseRobots(robots);
         rotateRobots(robots);
         replaceBrokenRobots(robots);
     }
@@ -133,7 +133,7 @@ public class ControlCenter {
      * @return An array detailing which world fields contain at least one coin
      */
     public boolean[][] scanWorld(ScanRobot[] scanRobots) {
-        boolean[][] positionsOfCoinsInWorld = new boolean[World.getWidth()][World.getHeight()];
+        boolean[][] positionsOfCoinsInWorld = new boolean[World.getHeight()][World.getWidth()];
         boolean allAtEndOfWorld = false;
         while (!allAtEndOfWorld) {
             allAtEndOfWorld = true;
@@ -141,7 +141,7 @@ public class ControlCenter {
                 if (scanRobot.isOnACoin()) {
                     int x = scanRobot.getX();
                     int y = scanRobot.getY();
-                    positionsOfCoinsInWorld[x][y] = true;
+                    positionsOfCoinsInWorld[y][x] = true;
                 }
 
                 if (scanRobot.isFrontClear()) {
@@ -169,7 +169,7 @@ public class ControlCenter {
             for (CleanRobot cleanRobot : cleanRobots) {
                 int x = cleanRobot.getX();
                 int y = cleanRobot.getY();
-                if (positionsOfCoins[x][y]) {
+                if (positionsOfCoins[y][x]) {
                     cleanRobot.pickCoin();
                 }
 

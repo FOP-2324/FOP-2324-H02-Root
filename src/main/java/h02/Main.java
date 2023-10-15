@@ -15,14 +15,15 @@ public class Main {
     public static void main(String[] args) {
         int numberOfRows = 6;
         int numberOfColumns = 11;
-        int[][] coins = new int[numberOfColumns][numberOfRows];
-        coins[7][4] = 1;
-        coins[8][1] = 1;
-        coins[9][2] = 2;
+        int[][] coins = new int[numberOfRows][numberOfColumns];
+        coins[4][7] = 1;
+        coins[1][8] = 1;
+        coins[2][9] = 2;
 
         ControlCenter controlCenter = new ControlCenter();
 
         World.setSize(numberOfColumns, numberOfRows);
+        World.getGlobalWorld().setDrawTurnedOffRobots(false);
         World.setVisible(true);
         World.setDelay(10);
         World.placeBlock(0, 0);
@@ -39,10 +40,10 @@ public class Main {
      * @param coins An array detailing how many coins to place in what position
      */
     public static void placeCoinsInWorld(int[][] coins) {
-        for (int i = 0; i < coins.length; i++) {
-            for (int j = 0; j < coins[i].length; j++) {
-                if (coins[i][j] != 0) {
-                    World.putCoins(i, j, coins[i][j]);
+        for (int y = 0; y < coins.length; y++) {
+            for (int x = 0; x < coins[y].length; x++) {
+                if (coins[y][x] != 0) {
+                    World.putCoins(x, y, coins[y][x]);
                 }
             }
         }
