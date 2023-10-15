@@ -141,15 +141,15 @@ public class ControlCenter {
         while (!allAtEndOfWorld) {
             allAtEndOfWorld = true;
             for (ScanRobot scanRobot : scanRobots) {
+                if (!scanRobot.isFrontClear()) {
+                    continue;
+                }
+                scanRobot.move();
+                allAtEndOfWorld = false;
                 if (scanRobot.isOnACoin()) {
                     int x = scanRobot.getX();
                     int y = scanRobot.getY();
                     positionsOfCoinsInWorld[y][x] = true;
-                }
-
-                if (scanRobot.isFrontClear()) {
-                    scanRobot.move();
-                    allAtEndOfWorld = false;
                 }
             }
         }
@@ -170,15 +170,15 @@ public class ControlCenter {
         while (!allAtEndOfWorld) {
             allAtEndOfWorld = true;
             for (CleanRobot cleanRobot : cleanRobots) {
+                if (!cleanRobot.isFrontClear()) {
+                    continue;
+                }
+                cleanRobot.move();
+                allAtEndOfWorld = false;
                 int x = cleanRobot.getX();
                 int y = cleanRobot.getY();
                 if (positionsOfCoins[y][x]) {
                     cleanRobot.pickCoin();
-                }
-
-                if (cleanRobot.isFrontClear()) {
-                    cleanRobot.move();
-                    allAtEndOfWorld = false;
                 }
             }
         }
