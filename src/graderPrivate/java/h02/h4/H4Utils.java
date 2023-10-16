@@ -21,11 +21,11 @@ public class H4Utils {
         Map.entry("direction", (n) -> Direction.valueOf(n.asText())),
         Map.entry(
             "coins",
-            (list) -> mirrorAndTranspose2dArray(to2dArray(list, int.class, JsonNode::asInt))
+            (list) -> verticalMirrorArray(to2dArray(list, int.class, JsonNode::asInt))
         ),
         Map.entry(
             "expected",
-            (list) -> mirrorAndTranspose2dArray(to2dArray(list, boolean.class, JsonNode::asBoolean))
+            (list) -> verticalMirrorArray(to2dArray(list, boolean.class, JsonNode::asBoolean))
         )
     );
 
@@ -47,10 +47,10 @@ public class H4Utils {
                 robot.turnLeft();
         }
 
-        for (int x = 0; x < coins.length; x++) {
-            for (int y = 0; y < coins[x].length; y++) {
-                if (coins[x][y] > 0)
-                    World.putCoins(x, y, coins[x][y]);
+        for (int y = 0; y < coins.length; y++) {
+            for (int x = 0; x < coins[y].length; x++) {
+                if (coins[y][x] > 0)
+                    World.putCoins(x, y, coins[y][x]);
             }
         }
     }
@@ -127,18 +127,15 @@ public class H4Utils {
      * @param <T>   The type of the array
      * @return The mirrored and transposed array
      */
-    static <T> T mirrorAndTranspose2dArray(T array) {
-        var arrayClass = array.getClass().getComponentType().getComponentType();
-        var newArray = (T) Array.newInstance(arrayClass, Array.getLength(Array.get(array, 0)), Array.getLength(array));
-
-        for (int y = 0; y < Array.getLength(array); y++) {
-            Object oldInner = Array.get(array, Array.getLength(array) - 1 - y);
-            for (int x = 0; x < Array.getLength(oldInner); x++) {
-                Array.set(Array.get(newArray, x), y, Array.get(oldInner, x));
-            }
+    static <T> T verticalMirrorArray(T array) {
+        var arrayLength = Array.getLength(array);
+        for (int y = 0; y < arrayLength / 2; y++) {
+            var tmp = Array.get(array, y);
+            Array.set(array, y, Array.get(array, arrayLength - y - 1));
+            Array.set(array, arrayLength - y - 1, tmp);
         }
 
-        return newArray;
+        return array;
     }
 
     /**

@@ -32,8 +32,8 @@ public class H2 implements IWorldSetup {
 
         var random = TestUtils.random(worldSize);
 
-        var coins = IntStream.range(0, worldSize.width()).sequential()
-            .mapToObj(x -> random.ints(worldSize.height(), 0, 5).toArray())
+        var coins = IntStream.range(0, worldSize.height()).sequential()
+            .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
         context = Assertions2.contextBuilder()
@@ -47,16 +47,16 @@ public class H2 implements IWorldSetup {
             r -> "The method `placeCoinsInWorld` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        for (int x = 0; x < coins.length; x++) {
-            for (int y = 0; y < coins[x].length; y++) {
-                var finalX = x;
+        for (int y = 0; y < coins.length; y++) {
+            for (int x = 0; x < coins[y].length; x++) {
                 var finalY = y;
+                var finalX = x;
 
                 Assertions2.assertEquals(
-                    normalizeAmounts ? normalizeAmount(coins[x][y]) : coins[x][y],
+                    normalizeAmounts ? normalizeAmount(coins[y][x]) : coins[y][x],
                     normalizeAmounts ? normalizeAmount(TestUtils.getCoinsOnField(x, y)) : TestUtils.getCoinsOnField(x, y),
                     context,
-                    r -> "The coin amount at position (%d, %d) should be %d.".formatted(finalX, finalY, coins[finalX][finalY])
+                    r -> "The coin amount at position (%d, %d) should be %d.".formatted(finalX, finalX, coins[finalY][finalX])
                 );
             }
         }

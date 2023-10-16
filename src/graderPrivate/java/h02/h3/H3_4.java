@@ -25,7 +25,7 @@ public class H3_4 {
         );
 
         var inOrder = inOrder(controlCenter);
-        inOrder.verify(controlCenter).invertRobots(same(dummyArray));
+        inOrder.verify(controlCenter).reverseRobots(same(dummyArray));
         inOrder.verify(controlCenter).rotateRobots(same(dummyArray));
         inOrder.verify(controlCenter).replaceBrokenRobots(same(dummyArray));
         inOrder.verifyNoMoreInteractions();

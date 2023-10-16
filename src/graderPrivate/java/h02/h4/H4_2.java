@@ -62,7 +62,7 @@ public class H4_2 implements IWorldSetup {
         );
 
         Assertions2.assertEquals(
-            worldWidth,
+            worldHeight,
             result.length,
             context,
             r -> "The method `scanWorld` returned an array with the wrong width."
@@ -76,7 +76,7 @@ public class H4_2 implements IWorldSetup {
             );
 
             Assertions2.assertEquals(
-                worldHeight,
+                worldWidth,
                 columns.length,
                 context,
                 r -> "The method `scanWorld` returned a column array with the wrong height."
@@ -117,15 +117,15 @@ public class H4_2 implements IWorldSetup {
             r -> "The method `scanWorld` returned `null`."
         );
 
-        for (int x = 0; x < coins.length; x++) {
-            for (int y = 0; y < coins[x].length; y++) {
-                var finalX = x;
+        for (int y = 0; y < coins.length; y++) {
+            for (int x = 0; x < coins[y].length; x++) {
                 var finalY = y;
+                var finalX = x;
 
                 try {
                     Assertions2.assertEquals(
-                        expected[x][y],
-                        result[x][y],
+                        expected[y][x],
+                        result[y][x],
                         context,
                         r -> "The method `scanWorld` returned an array with the wrong value at position (%d, %d).".formatted(finalX, finalY)
                     );

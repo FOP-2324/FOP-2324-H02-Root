@@ -70,23 +70,23 @@ public class H4_3 implements IWorldSetup {
             r -> "The method `returnRobots` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        for (int x = 0; x < expected.length; x++) {
-            for (int y = 0; y < expected[x].length; y++) {
-                var finalX = x;
+        for (int y = 0; y < expected.length; y++) {
+            for (int x = 0; x < expected[y].length; x++) {
                 var finalY = y;
+                var finalX = x;
 
                 var coinsOnField = TestUtils.getCoinsOnField(x, y);
 
                 if (exact) {
                     Assertions2.assertEquals(
-                        coins[x][y] - (expected[x][y] ? 1 : 0),
+                        coins[y][x] - (expected[y][x] ? 1 : 0),
                         coinsOnField,
                         context,
                         r -> "The coin amount at position (%d, %d) was incorrect.".formatted(finalX, finalY)
                     );
                 } else {
                     Assertions2.assertTrue(
-                        expected[x][y] ? coinsOnField < coins[x][y] : coinsOnField == coins[x][y],
+                        expected[y][x] ? coinsOnField < coins[y][x] : coinsOnField == coins[y][x],
                         context,
                         r -> "No coin was picked up at the position (%d, %d).".formatted(finalX, finalY)
                     );

@@ -24,7 +24,7 @@ public class H3_1 implements IWorldSetup {
             var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
 
             Assertions2.call(
-                () -> controlCenter.invertRobots(robots),
+                () -> controlCenter.reverseRobots(robots),
                 Assertions2.emptyContext(),
                 r -> "The method `invertRobots` threw an exception: %s".formatted(r.cause().toString())
             );
