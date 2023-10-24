@@ -2,6 +2,8 @@ package h02;
 
 import fopbot.World;
 
+import java.util.Arrays;
+
 /**
  * Main entry point in executing the program.
  */
@@ -16,11 +18,24 @@ public class Main {
         // define world dimensions
         int numberOfRows = 15;
         int numberOfColumns = 16;
-        // create an array for filling the world with some coins
-        int[][] coins = new int[numberOfRows][numberOfColumns];
-        // add some entries to the array using the provided method that provides a mysterious pattern
-        fillArray(coins);
-
+        // create an array for filling the world with some coins in a mysterious pattern
+        int[][] coins = new int[][]{
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+            {0, 0, 0, 1, 0, 4, 4, 0, 0, 4, 4, 0, 1, 0, 0, 0},
+            {0, 0, 1, 0, 4, 0, 0, 4, 4, 0, 0, 4, 0, 1, 0, 0},
+            {0, 0, 1, 0, 4, 0, 0, 0, 0, 0, 0, 4, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 2, 0, 0, 0, 3, 1, 1, 3, 0, 0, 0, 2, 0, 0},
+            {0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 3, 0, 2, 0, 0, 0},
+            {0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
         // // for a smaller example, simply uncomment the following code
         // numberOfRows = 6;
         // numberOfColumns = 11;
@@ -60,62 +75,5 @@ public class Main {
                 }
             }
         }
-    }
-
-    /**
-     * Fills the given array with a mysterious pattern that represents coins in the world.
-     * The array should be at least 13x13 cells big.
-     *
-     * @param coins the array to fill
-     */
-    public static void fillArray(int[][] coins) {
-        coins[12][11] = 3;
-        coins[12][4] = 3;
-        coins[11][10] = 3;
-        coins[11][5] = 3;
-        coins[11][12] = 2;
-        coins[11][3] = 2;
-
-        coins[10][9] = 3;
-        coins[10][6] = 3;
-        coins[10][8] = 1;
-        coins[10][7] = 1;
-
-        coins[8][5] = 4;
-        coins[8][10] = 4;
-
-        coins[5][7] = 4;
-        coins[5][8] = 4;
-        coins[4][6] = 4;
-        coins[4][9] = 4;
-        coins[4][5] = 4;
-        coins[4][10] = 4;
-        coins[5][4] = 4;
-        coins[5][11] = 4;
-        coins[6][4] = 4;
-        coins[6][11] = 4;
-
-        coins[10][2] = 2;
-        coins[9][2] = 1;
-        coins[8][2] = 1;
-        coins[7][2] = 1;
-        coins[6][2] = 1;
-        coins[5][2] = 1;
-        coins[4][3] = 1;
-        coins[3][4] = 1;
-        coins[2][5] = 1;
-        coins[2][6] = 1;
-        coins[2][7] = 1;
-        coins[2][8] = 1;
-        coins[2][9] = 1;
-        coins[2][10] = 1;
-        coins[3][11] = 1;
-        coins[4][12] = 1;
-        coins[5][13] = 1;
-        coins[6][13] = 1;
-        coins[7][13] = 1;
-        coins[8][13] = 1;
-        coins[9][13] = 1;
-        coins[10][13] = 2;
     }
 }
