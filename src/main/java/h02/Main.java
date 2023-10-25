@@ -2,8 +2,6 @@ package h02;
 
 import fopbot.World;
 
-import java.util.Arrays;
-
 /**
  * Main entry point in executing the program.
  */
