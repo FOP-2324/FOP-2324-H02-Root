@@ -15,7 +15,10 @@ public class ControlCenter {
      * @return An array containing the newly initialised robots
      */
     public ScanRobot[] initScanRobots() {
+        // H1.1
+        // create array with correct size
         ScanRobot[] scanRobots = new ScanRobot[World.getWidth() - 1];
+        // fill array
         for (int i = 0; i < World.getWidth() - 1; i++) {
             scanRobots[i] = new ScanRobot(i + 1, 0, Direction.UP, 0);
         }
@@ -28,7 +31,10 @@ public class ControlCenter {
      * @return An array containing the newly initialised robots
      */
     public CleanRobot[] initCleaningRobots() {
+        // H1.2
+        // create array with correct size
         CleanRobot[] cleanRobots = new CleanRobot[World.getHeight() - 1];
+        // fill array
         for (int i = 0; i < World.getHeight() - 1; i++) {
             cleanRobots[i] = new CleanRobot(0, i + 1, Direction.RIGHT, 0);
         }
@@ -41,7 +47,10 @@ public class ControlCenter {
      * @param robots The array to invert
      */
     public void reverseRobots(Robot[] robots) {
+        // H3.1
+        // only walk half of the array
         for (int i = robots.length; i > robots.length / 2; i--) {
+            // swap two robots
             Robot tmp = robots[i - 1];
             robots[i - 1] = robots[robots.length - i];
             robots[robots.length - i] = tmp;
@@ -54,6 +63,8 @@ public class ControlCenter {
      * @param robots The array of {@linkplain Robot robots} to rotate
      */
     public void rotateRobots(Robot[] robots) {
+        // H3.2
+        // this construct is useful here because we do not care about the index of the robot being rotated
         for (Robot robot : robots) {
             robot.turnLeft();
             robot.turnLeft();
@@ -80,12 +91,15 @@ public class ControlCenter {
      * @param robots An array possibly containing {@linkplain Robot robots} that are turned off and need to be replaced
      */
     public void replaceBrokenRobots(Robot[] robots) {
+        // H3.3
         for (int i = 0; i < robots.length; i++) {
             if (robots[i].isTurnedOff()) {
+                // save all important attributes
                 int x = robots[i].getX();
                 int y = robots[i].getY();
                 int numberOfCoins = robots[i].getNumberOfCoins();
                 Direction direction = robots[i].getDirection();
+                // create new robot with the previously saved attributes
                 if (isScanRobotArray(robots)) {
                     robots[i] = new ScanRobot(x, y, direction, numberOfCoins);
                 } else {
@@ -111,6 +125,7 @@ public class ControlCenter {
      * @param robots The array to perform the aforementioned actions on
      */
     public void spinRobots(Robot[] robots) {
+        // H3.4
         reverseRobots(robots);
         rotateRobots(robots);
         replaceBrokenRobots(robots);
@@ -122,6 +137,7 @@ public class ControlCenter {
      * @param robots The robots to move
      */
     public void returnRobots(Robot[] robots) {
+        // H4.1
         for (Robot robot : robots) {
             while (robot.isFrontClear()) {
                 robot.move();
@@ -136,16 +152,19 @@ public class ControlCenter {
      * @return An array detailing which world fields contain at least one coin
      */
     public boolean[][] scanWorld(ScanRobot[] scanRobots) {
+        // H4.2
+        // booleans are initialised as false in arrays
         boolean[][] positionsOfCoinsInWorld = new boolean[World.getHeight()][World.getWidth()];
         boolean allAtEndOfWorld = false;
         while (!allAtEndOfWorld) {
-            allAtEndOfWorld = true;
             for (ScanRobot scanRobot : scanRobots) {
+                // check whether the end of the world has been reached
                 if (!scanRobot.isFrontClear()) {
-                    continue;
+                    allAtEndOfWorld = true;
+                    break;
                 }
+                // if not move and potentially deal with a found coin
                 scanRobot.move();
-                allAtEndOfWorld = false;
                 if (scanRobot.isOnACoin()) {
                     int x = scanRobot.getX();
                     int y = scanRobot.getY();
@@ -153,6 +172,7 @@ public class ControlCenter {
                 }
             }
         }
+        // if the while loop has terminated, the end of the world has been reached, so spin the robots and return
         spinRobots(scanRobots);
         returnRobots(scanRobots);
         spinRobots(scanRobots);
@@ -166,15 +186,16 @@ public class ControlCenter {
      * @param cleanRobots      An array containing the {@linkplain CleanRobot CleanRobots} to collect the coins with.
      */
     public void moveCleanRobots(CleanRobot[] cleanRobots, boolean[][] positionsOfCoins) {
+        //H4.3
         boolean allAtEndOfWorld = false;
+        // very similar to scanWorld, just collect coins if needed instead of adding an array entry
         while (!allAtEndOfWorld) {
-            allAtEndOfWorld = true;
             for (CleanRobot cleanRobot : cleanRobots) {
                 if (!cleanRobot.isFrontClear()) {
-                    continue;
+                    allAtEndOfWorld = true;
+                    break;
                 }
                 cleanRobot.move();
-                allAtEndOfWorld = false;
                 int x = cleanRobot.getX();
                 int y = cleanRobot.getY();
                 if (positionsOfCoins[y][x]) {

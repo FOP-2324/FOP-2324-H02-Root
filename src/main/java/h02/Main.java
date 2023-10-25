@@ -68,8 +68,10 @@ public class Main {
      * @param coins An array detailing how many coins to place in what position
      */
     public static void placeCoinsInWorld(int[][] coins) {
+        // H2
         for (int y = 0; y < coins.length; y++) {
             for (int x = 0; x < coins[y].length; x++) {
+                // putCoins does not accept values < 1, so a check is needed
                 if (coins[y][x] != 0) {
                     World.putCoins(x, y, coins[y][x]);
                 }
