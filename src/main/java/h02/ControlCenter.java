@@ -154,7 +154,7 @@ public class ControlCenter {
     public boolean[][] scanWorld(ScanRobot[] scanRobots) {
         // H4.2
         // booleans are initialised as false in arrays
-        boolean[][] positionsOfCoinsInWorld = new boolean[World.getHeight()][World.getWidth()];
+        boolean[][] coinPositions = new boolean[World.getHeight()][World.getWidth()];
         boolean allAtEndOfWorld = false;
         while (!allAtEndOfWorld) {
             for (ScanRobot scanRobot : scanRobots) {
@@ -168,7 +168,7 @@ public class ControlCenter {
                 if (scanRobot.isOnACoin()) {
                     int x = scanRobot.getX();
                     int y = scanRobot.getY();
-                    positionsOfCoinsInWorld[y][x] = true;
+                    coinPositions[y][x] = true;
                 }
             }
         }
@@ -176,16 +176,16 @@ public class ControlCenter {
         spinRobots(scanRobots);
         returnRobots(scanRobots);
         spinRobots(scanRobots);
-        return positionsOfCoinsInWorld;
+        return coinPositions;
     }
 
     /**
      * Performs one iteration of collecting coins, using the provided arrays to clean and determine where to clean.
      *
-     * @param positionsOfCoins An array with all the coin positions to be collected
-     * @param cleanRobots      An array containing the {@linkplain CleanRobot CleanRobots} to collect the coins with.
+     * @param coinPositions An array with all the coin positions to be collected
+     * @param cleanRobots   An array containing the {@linkplain CleanRobot CleanRobots} to collect the coins with.
      */
-    public void moveCleanRobots(CleanRobot[] cleanRobots, boolean[][] positionsOfCoins) {
+    public void moveCleanRobots(CleanRobot[] cleanRobots, boolean[][] coinPositions) {
         //H4.3
         boolean allAtEndOfWorld = false;
         // very similar to scanWorld, just collect coins if needed instead of adding an array entry
@@ -198,7 +198,7 @@ public class ControlCenter {
                 cleanRobot.move();
                 int x = cleanRobot.getX();
                 int y = cleanRobot.getY();
-                if (positionsOfCoins[y][x]) {
+                if (coinPositions[y][x]) {
                     cleanRobot.pickCoin();
                 }
             }
