@@ -161,7 +161,7 @@ public class ControlCenter {
                 // check whether the end of the world has been reached
                 if (!scanRobot.isFrontClear()) {
                     allAtEndOfWorld = true;
-                    break;
+                    continue;
                 }
                 // if not move and potentially deal with a found coin
                 scanRobot.move();
@@ -193,7 +193,7 @@ public class ControlCenter {
             for (CleanRobot cleanRobot : cleanRobots) {
                 if (!cleanRobot.isFrontClear()) {
                     allAtEndOfWorld = true;
-                    break;
+                    continue;
                 }
                 cleanRobot.move();
                 int x = cleanRobot.getX();
