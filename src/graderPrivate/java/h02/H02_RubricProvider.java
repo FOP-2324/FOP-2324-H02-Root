@@ -66,8 +66,12 @@ public class H02_RubricProvider implements RubricProvider {
                     Criterion.builder()
                         .shortDescription("H3.1 | Invertierung der Roboter")
                         .addChildCriteria(
-                            criterion("Die Roboter sind im Array korrekt vertauscht.", 4,
-                                JUnitTestRef.ofMethod(() -> H3_1.class.getDeclaredMethod("testInvertRobotsArray")))
+                            criterion("Die Roboter sind im Array korrekt vertauscht.", 2,
+                                JUnitTestRef.ofMethod(() -> H3_1.class.getDeclaredMethod("testInvertRobotsArray"))),
+                            criterion("Das Element enthält die gleichen Elemente wie vor dem Aufruf.", 1,
+                                JUnitTestRef.ofMethod(() -> H3_1.class.getDeclaredMethod("testArrayHasSameElements"))),
+                            criterion("Die Roboter wurden nicht modifiziert.", 1,
+                                JUnitTestRef.ofMethod(() -> H3_1.class.getDeclaredMethod("testRobotsWereNotModified")))
                         )
                         .build(),
                     Criterion.builder()
