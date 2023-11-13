@@ -16,6 +16,9 @@ import java.util.stream.Stream;
 
 public class TestUtils {
 
+    public static final int TEST_TIMEOUT_IN_SECONDS = 5;
+    public static final int ACTION_LIMIT = 350;
+
     private static final long THE_SEED = 1234L;
 
     /**
@@ -62,7 +65,7 @@ public class TestUtils {
     public static void setWorldSizeAndActionLimit(int width, int height) {
         World.setSize(width, height);
         // Running the solution shows no action count higher than 165
-        World.getGlobalWorld().setActionLimit(350);
+        World.getGlobalWorld().setActionLimit(TestUtils.ACTION_LIMIT);
     }
 
     public static Stream<Arguments> allWorldSizes() {

@@ -7,6 +7,7 @@ import h02.ControlCenter;
 import h02.IWorldSetup;
 import h02.RobotArrayTestUtils;
 import h02.TestUtils;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
@@ -16,6 +17,10 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import java.util.Arrays;
 
 @TestForSubmission
+@Timeout(
+    value = TestUtils.TEST_TIMEOUT_IN_SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class H4_1 implements IWorldSetup {
 
     @ParameterizedTest

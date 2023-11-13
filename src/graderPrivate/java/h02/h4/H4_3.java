@@ -9,6 +9,7 @@ import h02.CleanRobot;
 import h02.ControlCenter;
 import h02.IWorldSetup;
 import h02.TestUtils;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -24,6 +25,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 @TestForSubmission
+@Timeout(
+    value = TestUtils.TEST_TIMEOUT_IN_SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class H4_3 implements IWorldSetup {
 
     public static final Map<String, Function<JsonNode, ?>> CUSTOM_CONVERTERS = new HashMap<>(H4Utils.CUSTOM_CONVERTERS);

@@ -7,12 +7,17 @@ import h02.IWorldSetup;
 import h02.RobotArrayTestUtils;
 import h02.TestUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 
 import java.util.Arrays;
 
 @TestForSubmission
+@Timeout(
+    value = TestUtils.TEST_TIMEOUT_IN_SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class H3_1 implements IWorldSetup {
 
     @Test

@@ -42,7 +42,7 @@ jagr {
                         ),
                     ),
                     transformers = org.sourcegrade.jagr.launcher.env.Transformers(
-                        timeout = org.sourcegrade.jagr.launcher.env.Transformers.TimeoutTransformer(enabled = true),
+                        timeout = org.sourcegrade.jagr.launcher.env.Transformers.TimeoutTransformer(enabled = false),
                     ),
                 ),
             )
