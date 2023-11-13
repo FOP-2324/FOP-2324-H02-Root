@@ -41,7 +41,12 @@ public class H02_RubricProvider implements RubricProvider {
                     Criterion.builder()
                         .shortDescription("H1.2 | CleanRobots")
                         .addChildCriteria(
-                            criterion("Die Initialisierung funktioniert vollständig korrekt.", JUnitTestRef.ofClass(H1_2.class))
+                            criterion("Das Array hat die korrekte Länge der Breite der Welt.",
+                                JUnitTestRef.ofMethod(() -> H1_2.class.getDeclaredMethod("testArrayLength", TestUtils.WorldSize.class, Context.class))),
+                            criterion("Es stehen auf keinem Feld zwei Roboter.",
+                                JUnitTestRef.ofMethod(() -> H1_2.class.getDeclaredMethod("testNoRobotsWithDuplicatePositions", TestUtils.WorldSize.class, Context.class))),
+                            criterion("Die Roboter sind alle richtig initialisiert (Koordinaten, Ausrichtung und keine Münzen).",
+                                JUnitTestRef.ofMethod(() -> H1_2.class.getDeclaredMethod("testRobotStates", TestUtils.WorldSize.class, Context.class)))
                         )
                         .build()
                 )
@@ -50,7 +55,7 @@ public class H02_RubricProvider implements RubricProvider {
                 .shortDescription("H2 | Platzieren der Münzen")
                 .addChildCriteria(
                     criterion("Es werden auf die korrekten Felder Münzen platziert.",
-                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testCoinPositions", TestUtils.WorldSize.class, Context.class))),
+                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testCoinPositions", TestUtils.WorldSize.class, Context.class)), 2),
                     criterion("Es wird die korrekte Anzahl an Münzen auf dem jeweiligen Feld platziert",
                         JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testCoinAmounts", TestUtils.WorldSize.class, Context.class)))
                 )
@@ -61,7 +66,7 @@ public class H02_RubricProvider implements RubricProvider {
                     Criterion.builder()
                         .shortDescription("H3.1 | Invertierung der Roboter")
                         .addChildCriteria(
-                            criterion("Die Roboter sind im Array korrekt vertauscht.", 3,
+                            criterion("Die Roboter sind im Array korrekt vertauscht.", 4,
                                 JUnitTestRef.ofMethod(() -> H3_1.class.getDeclaredMethod("testInvertRobotsArray")))
                         )
                         .build(),
@@ -136,10 +141,6 @@ public class H02_RubricProvider implements RubricProvider {
                         )
                         .build()
                 )
-                .build(),
-            Criterion.builder()
-                .shortDescription("H5 | Tests")
-                .addChildCriteria(criterion("TODO", 3))
                 .build()
         )
         .build();

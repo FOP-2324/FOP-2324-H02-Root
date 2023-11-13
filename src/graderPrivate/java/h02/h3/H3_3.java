@@ -1,7 +1,6 @@
 package h02.h3;
 
 import fopbot.Robot;
-import fopbot.World;
 import h02.CleanRobot;
 import h02.ControlCenter;
 import h02.IWorldSetup;
@@ -52,7 +51,7 @@ public class H3_3 implements IWorldSetup {
     }
 
     private void testRobotProperties(TestUtils.WorldSize worldSize, Context context, Class<? extends Robot> robotClass, RobotArrayTestUtils.RobotArrayElementVerifier verifier) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         var random = TestUtils.random(worldSize);
         var robotArrays = RobotArrayTestUtils.generateRobotArray(robotClass, random, worldSize);

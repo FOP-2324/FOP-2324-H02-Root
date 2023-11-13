@@ -2,7 +2,6 @@ package h02.h3;
 
 import fopbot.Direction;
 import fopbot.Robot;
-import fopbot.World;
 import h02.ControlCenter;
 import h02.IWorldSetup;
 import h02.RobotArrayTestUtils;
@@ -26,7 +25,7 @@ public class H3_2 implements IWorldSetup {
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
     public void testRotateRobots(TestUtils.WorldSize worldSize, Context context) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         var random = TestUtils.random(worldSize);
         var robotArrays = RobotArrayTestUtils.generateRobotArray(Robot.class, random, worldSize);
@@ -61,7 +60,7 @@ public class H3_2 implements IWorldSetup {
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
     public void testCheckForDamageCalls(TestUtils.WorldSize worldSize, Context context) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         var random = TestUtils.random(worldSize);
         var robotArrays = RobotArrayTestUtils.generateRobotArray(Robot.class, random, worldSize);

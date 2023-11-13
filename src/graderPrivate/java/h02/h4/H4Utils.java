@@ -142,11 +142,10 @@ public class H4Utils {
      * Replaces the method {@link ControlCenter#spinRobots(Robot[])} and {@link ControlCenter#returnRobots(Robot[])}
      * with solution implementations to not depend on the correctness of those methods.
      *
-     * @param instance The instance to mock the methods on
      * @return The mocked instance
      */
-    static ControlCenter mockReturnAndSpinRobots(ControlCenter instance) {
-        ControlCenter controlCenter = Mockito.spy(instance);
+    static ControlCenter mockReturnAndSpinRobots() {
+        ControlCenter controlCenter = Mockito.mock(Mockito.withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS));
         Mockito.doAnswer((i) -> {
             Robot[] robots = i.getArgument(0);
             for (Robot robot : robots) {

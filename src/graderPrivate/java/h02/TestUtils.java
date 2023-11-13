@@ -59,6 +59,12 @@ public class TestUtils {
         return new Random(Objects.hash(THE_SEED, Arrays.hashCode(magicValues)));
     }
 
+    public static void setWorldSizeAndActionLimit(int width, int height) {
+        World.setSize(width, height);
+        // Running the solution shows no action count higher than 165
+        World.getGlobalWorld().setActionLimit(350);
+    }
+
     public static Stream<Arguments> allWorldSizes() {
         return WORLD_SIZE_ARGUMENTS.stream();
     }

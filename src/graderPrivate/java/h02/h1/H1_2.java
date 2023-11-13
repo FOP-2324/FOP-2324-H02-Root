@@ -20,4 +20,10 @@ public class H1_2 extends H1_AbstractTest {
     public void testRobotStates(TestUtils.WorldSize worldSize, Context context) {
         testRobotStates(worldSize, context, RobotType.CLEAN);
     }
+
+    @ParameterizedTest
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testNoRobotsWithDuplicatePositions(TestUtils.WorldSize worldSize, Context context) {
+        testNoRobotsWithDuplicatePositions(worldSize, context, RobotType.CLEAN);
+    }
 }

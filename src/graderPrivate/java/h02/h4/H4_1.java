@@ -31,7 +31,7 @@ public class H4_1 implements IWorldSetup {
     }
 
     private static void testRobotMovement(TestUtils.WorldSize worldSize, Context context, boolean checkStrictMovement) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         var random = TestUtils.random(worldSize);
 

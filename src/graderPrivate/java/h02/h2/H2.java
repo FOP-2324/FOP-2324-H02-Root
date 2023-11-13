@@ -1,6 +1,5 @@
 package h02.h2;
 
-import fopbot.World;
 import h02.IWorldSetup;
 import h02.Main;
 import h02.TestUtils;
@@ -28,7 +27,7 @@ public class H2 implements IWorldSetup {
     }
 
     private void testCoins(TestUtils.WorldSize worldSize, Context context, boolean normalizeAmounts) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         var random = TestUtils.random(worldSize);
 

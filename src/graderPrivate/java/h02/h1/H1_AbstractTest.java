@@ -11,12 +11,13 @@ import h02.TestUtils;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
+import java.util.HashSet;
 import java.util.function.Function;
 
 public abstract class H1_AbstractTest implements IWorldSetup {
 
     public void testArrayLength(TestUtils.WorldSize worldSize, Context context, RobotType robotType) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         ControlCenter controlCenter = new ControlCenter();
 
@@ -37,7 +38,7 @@ public abstract class H1_AbstractTest implements IWorldSetup {
     }
 
     public void testRobotStates(TestUtils.WorldSize worldSize, Context context, RobotType robotType) {
-        World.setSize(worldSize.width(), worldSize.height());
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         ControlCenter controlCenter = new ControlCenter();
 
@@ -79,6 +80,37 @@ public abstract class H1_AbstractTest implements IWorldSetup {
                 r -> "The robot at index %d has the wrong direction.".formatted(finalI));
             Assertions2.assertEquals(0, robot.getNumberOfCoins(), context,
                 r -> "The robot at index %d has the wrong number of coins.".formatted(finalI));
+        }
+    }
+
+    public void testNoRobotsWithDuplicatePositions(TestUtils.WorldSize worldSize, Context context, RobotType robotType) {
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
+
+        ControlCenter controlCenter = new ControlCenter();
+
+        var robots = Assertions2.callObject(
+            () -> robotType.getInitMethodInvoker().apply(controlCenter),
+            context,
+            r -> "The method `%s` threw an exception: %s".formatted(robotType.getInitMethodName(), r.cause().toString())
+        );
+
+        Assertions2.assertNotNull(robots, context, r -> "The method `%s` returned `null`.".formatted(robotType.getInitMethodName()));
+
+        record Position(int x, int y) {}
+        var positions = new HashSet<Position>();
+
+        // Could be done in an easier way, but this gives more precise error messages
+        for (int i = 0; i < robots.length; i++) {
+            var robot = robots[i];
+            var finalI = i;
+            Assertions2.assertNotNull(robot, context, r -> "The robot at index %d is `null`.".formatted(finalI));
+            Assertions2.assertFalse(
+                positions.contains(new Position(robot.getX(), robot.getY())),
+                context,
+                r -> "The robot at index %d has the same position as another robot.".formatted(finalI)
+            );
+
+            positions.add(new Position(robot.getX(), robot.getY()));
         }
     }
 

@@ -3,10 +3,10 @@ package h02.h4;
 import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.Robot;
-import fopbot.World;
 import h02.ControlCenter;
 import h02.IWorldSetup;
 import h02.ScanRobot;
+import h02.TestUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -34,7 +34,7 @@ public class H4_2 implements IWorldSetup {
     public void testArrayDimensions(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
-        World.setSize(worldWidth, worldHeight);
+        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
         ScanRobot[] robots = parameterSet.get("robots");
         Direction direction = parameterSet.get("direction");
@@ -47,7 +47,7 @@ public class H4_2 implements IWorldSetup {
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
+        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         var result = Assertions2.callObject(
             () -> controlCenter.scanWorld(robots),
@@ -89,7 +89,7 @@ public class H4_2 implements IWorldSetup {
     public void testResultArrayEntriesCorrect(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
-        World.setSize(worldWidth, worldHeight);
+        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
         ScanRobot[] robots = parameterSet.get("robots");
         Direction direction = parameterSet.get("direction");
@@ -103,7 +103,7 @@ public class H4_2 implements IWorldSetup {
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
+        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         var result = Assertions2.callObject(
             () -> controlCenter.scanWorld(robots),
@@ -144,7 +144,7 @@ public class H4_2 implements IWorldSetup {
     public void testSpinRobotsUsage(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
-        World.setSize(worldWidth, worldHeight);
+        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
         ScanRobot[] robots = parameterSet.get("robots");
         ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
@@ -161,7 +161,7 @@ public class H4_2 implements IWorldSetup {
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
+        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         var invalidInvocationMessage = new String[1];
         var times = new AtomicInteger(0);
@@ -218,7 +218,7 @@ public class H4_2 implements IWorldSetup {
     public void testReturnRobotsUsage(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
-        World.setSize(worldWidth, worldHeight);
+        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
         ScanRobot[] robots = parameterSet.get("robots");
         ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
@@ -234,7 +234,7 @@ public class H4_2 implements IWorldSetup {
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
+        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         var invalidInvocationMessage = new String[1];
         Mockito.doAnswer((Answer<Object>) invocation -> {
@@ -277,7 +277,7 @@ public class H4_2 implements IWorldSetup {
     public void testRobotsFinalPositionAndDirection(JsonParameterSet parameterSet) {
         int worldWidth = parameterSet.get("worldWidth");
         int worldHeight = parameterSet.get("worldHeight");
-        World.setSize(worldWidth, worldHeight);
+        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
         ScanRobot[] robots = parameterSet.get("robots");
         ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
@@ -297,7 +297,7 @@ public class H4_2 implements IWorldSetup {
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots(new ControlCenter());
+        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         var result = Assertions2.callObject(
             () -> controlCenter.scanWorld(robots),
