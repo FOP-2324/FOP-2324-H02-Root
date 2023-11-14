@@ -16,7 +16,7 @@ public class CleanRobot extends Robot {
      * @param direction     The {@link Direction} the {@link CleanRobot} is facing
      * @param numberOfCoins The number of coins the {@link CleanRobot} is holding
      */
-    public CleanRobot(int x, int y, Direction direction, int numberOfCoins) {
+    public CleanRobot(final int x, final int y, final Direction direction, final int numberOfCoins) {
         super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_BLACK);
     }
 
