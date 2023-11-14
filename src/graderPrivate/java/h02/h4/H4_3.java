@@ -34,42 +34,43 @@ import java.util.function.Function;
 public class H4_3 implements IWorldSetup {
 
     public static final Map<String, Function<JsonNode, ?>> CUSTOM_CONVERTERS = new HashMap<>(H4Utils.CUSTOM_CONVERTERS);
+
     static {
         CUSTOM_CONVERTERS.put("robots", H4Utils.robotConverter(CleanRobot.class));
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testPickedUpCoinAmountsAny(JsonParameterSet parameterSet) {
+    public void testPickedUpCoinAmountsAny(final JsonParameterSet parameterSet) {
         testPickedUpCoinAmounts(parameterSet, false);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testPickedUpCoinAmountsExact(JsonParameterSet parameterSet) {
+    public void testPickedUpCoinAmountsExact(final JsonParameterSet parameterSet) {
         testPickedUpCoinAmounts(parameterSet, true);
     }
 
-    private static void testPickedUpCoinAmounts(JsonParameterSet parameterSet, boolean exact) {
-        int worldWidth = parameterSet.get("worldWidth");
-        int worldHeight = parameterSet.get("worldHeight");
+    private static void testPickedUpCoinAmounts(final JsonParameterSet parameterSet, final boolean exact) {
+        final int worldWidth = parameterSet.get("worldWidth");
+        final int worldHeight = parameterSet.get("worldHeight");
         TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
-        Direction direction = parameterSet.get("direction");
-        boolean[][] expected = parameterSet.get("expected");
-        int[][] coins = parameterSet.get("coins");
+        final CleanRobot[] robots = parameterSet.get("robots");
+        final Direction direction = parameterSet.get("direction");
+        final boolean[][] expected = parameterSet.get("expected");
+        final int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        boolean[][] coinPositions = getCoinPositions(coins);
+        final boolean[][] coinPositions = getCoinPositions(coins);
 
-        var context = Assertions2.contextBuilder()
+        final var context = Assertions2.contextBuilder()
             .add("worldWidth", worldWidth)
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
+        final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         Assertions2.call(
             () -> controlCenter.moveCleanRobots(robots, coinPositions),
@@ -79,10 +80,10 @@ public class H4_3 implements IWorldSetup {
 
         for (int y = 0; y < expected.length; y++) {
             for (int x = 0; x < expected[y].length; x++) {
-                var finalY = y;
-                var finalX = x;
+                final var finalY = y;
+                final var finalX = x;
 
-                var coinsOnField = TestUtils.getCoinsOnField(x, y);
+                final var coinsOnField = TestUtils.getCoinsOnField(x, y);
 
                 if (exact) {
                     Assertions2.assertEquals(
@@ -104,28 +105,28 @@ public class H4_3 implements IWorldSetup {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testRobotMovement(JsonParameterSet parameterSet) {
-        int worldWidth = parameterSet.get("worldWidth");
-        int worldHeight = parameterSet.get("worldHeight");
+    public void testRobotMovement(final JsonParameterSet parameterSet) {
+        final int worldWidth = parameterSet.get("worldWidth");
+        final int worldHeight = parameterSet.get("worldHeight");
         TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
-        Direction direction = parameterSet.get("direction");
-        int[][] coins = parameterSet.get("coins");
+        final CleanRobot[] robots = parameterSet.get("robots");
+        final Direction direction = parameterSet.get("direction");
+        final int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        H4Utils.Position[] startingPositions = getPositions(robots);
-        H4Utils.Position[] finalPositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
-        boolean[][] coinPositions = getCoinPositions(coins);
+        final CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        final H4Utils.Position[] startingPositions = getPositions(robots);
+        final H4Utils.Position[] finalPositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
+        final boolean[][] coinPositions = getCoinPositions(coins);
 
-        var context = Assertions2.contextBuilder()
+        final var context = Assertions2.contextBuilder()
             .add("worldWidth", worldWidth)
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
+        final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
         Assertions2.call(
             () -> controlCenter.moveCleanRobots(robots, coinPositions),
@@ -134,86 +135,102 @@ public class H4_3 implements IWorldSetup {
         );
 
         for (int i = 0; i < robotsReferenceCopy.length; i++) {
-            var finalI = i;
-            var robot = robotsReferenceCopy[i];
+            final var finalI = i;
+            final var robot = robotsReferenceCopy[i];
 
-            var trace = World.getGlobalWorld().getTrace(robot);
+            final var trace = World.getGlobalWorld().getTrace(robot);
             var moveCount = 0;
             var reachedEnd = false;
-            for (var transition : trace.getTransitions()) {
-                var finalPosition = finalPositions[i];
+            for (final var transition : trace.getTransitions()) {
+                final var finalPosition = finalPositions[i];
 
                 if (transition.robot.getX() == finalPosition.x() && transition.robot.getY() == finalPosition.y()) {
                     reachedEnd = true;
                     break;
                 }
 
-                if (transition.action != Transition.RobotAction.MOVE)
+                if (transition.action != Transition.RobotAction.MOVE) {
                     continue;
+                }
 
                 moveCount++;
             }
 
-            if (!reachedEnd)
-                Assertions2.fail(context, r -> "The robot at index %d did not reach the end of the world.".formatted(finalI));
+            if (!reachedEnd) {
+                Assertions2.fail(
+                    context,
+                    r -> "The robot at index %d did not reach the end of the world.".formatted(finalI)
+                );
+            }
 
             Assertions2.assertEquals(
                 startingPositions[i].manhattanDistance(finalPositions[i]),
                 moveCount,
                 context,
-                r -> "The robot at index %d did not perform the minimal number of move actions to reach the end of the world.".formatted(finalI)
+                r -> (
+                    "The robot at index %d did not perform the minimal number of move actions to reach the end of the"
+                        + " world."
+                ).formatted(finalI)
             );
         }
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testSpinRobotsUsage(JsonParameterSet parameterSet) {
-        int worldWidth = parameterSet.get("worldWidth");
-        int worldHeight = parameterSet.get("worldHeight");
+    public void testSpinRobotsUsage(final JsonParameterSet parameterSet) {
+        final int worldWidth = parameterSet.get("worldWidth");
+        final int worldHeight = parameterSet.get("worldHeight");
         TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
-        CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        Direction direction = parameterSet.get("direction");
-        int[][] coins = parameterSet.get("coins");
+        final CleanRobot[] robots = parameterSet.get("robots");
+        final CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        final Direction direction = parameterSet.get("direction");
+        final int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        boolean[][] coinPositions = getCoinPositions(coins);
-        var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
-        var secondEdgePositions = H4Utils.getEndOfWorldPositions(firstEdgePositions, Direction.values()[(direction.ordinal() + 2) % 4], worldWidth, worldHeight);
+        final boolean[][] coinPositions = getCoinPositions(coins);
+        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
+        final var secondEdgePositions = H4Utils.getEndOfWorldPositions(
+            firstEdgePositions,
+            Direction.values()[(direction.ordinal() + 2) % 4],
+            worldWidth,
+            worldHeight
+        );
 
-        var context = Assertions2.contextBuilder()
+        final var context = Assertions2.contextBuilder()
             .add("worldWidth", worldWidth)
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
+        final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
-        var invalidInvocationMessage = new String[1];
-        var times = new AtomicInteger(0);
+        final var invalidInvocationMessage = new String[1];
+        final var times = new AtomicInteger(0);
         Mockito.doAnswer((Answer<Object>) invocation -> {
             // The first time this should be called is when all robots are at the end of the world
             if (times.get() == 0) {
                 for (int i = 0; i < robotsReferenceCopy.length; i++) {
-                    var robot = robotsReferenceCopy[i];
+                    final var robot = robotsReferenceCopy[i];
                     var valid = robot.getDirection() == direction;
                     valid &= firstEdgePositions[i].x() == robot.getX() && firstEdgePositions[i].y() == robot.getY();
 
                     if (!valid) {
-                        invalidInvocationMessage[0] = "The method `spinRobots` was not called the first time when all robots were at the end of the world.";
+                        invalidInvocationMessage[0] = "The method `spinRobots` was not called the first time when all"
+                            + " robots were at the end of the world.";
                         break;
                     }
                 }
-            } else if (times.get() == 1) { // The second time this should be called is when all robots are at the opposite end of the world
+            } else if (times.get() == 1) {
+                // The second time this should be called is when all robots are at the opposite end of the world
                 for (int i = 0; i < robotsReferenceCopy.length; i++) {
-                    var robot = robotsReferenceCopy[i];
+                    final var robot = robotsReferenceCopy[i];
                     var valid = (Direction.values()[(robot.getDirection().ordinal() + 2) % 4]) == direction;
                     valid &= secondEdgePositions[i].x() == robot.getX() && secondEdgePositions[i].y() == robot.getY();
 
                     if (!valid) {
-                        invalidInvocationMessage[0] = "The method `spinRobots` was not called the second time when all robots were at the opposite end of the world.";
+                        invalidInvocationMessage[0] = "The method `spinRobots` was not called the second time when all"
+                            + " robots were at the opposite end of the world.";
                         break;
                     }
                 }
@@ -221,8 +238,8 @@ public class H4_3 implements IWorldSetup {
 
             times.incrementAndGet();
             // Solution impl for spinRobots
-            var argument = (Robot[]) invocation.getArgument(0);
-            for (Robot robot : argument) {
+            final var argument = (Robot[]) invocation.getArgument(0);
+            for (final Robot robot : argument) {
                 robot.turnLeft();
                 robot.turnLeft();
             }
@@ -235,56 +252,59 @@ public class H4_3 implements IWorldSetup {
             r -> "The method `moveCleanRobots` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        if (invalidInvocationMessage[0] != null)
+        if (invalidInvocationMessage[0] != null) {
             Assertions2.fail(context, r -> invalidInvocationMessage[0]);
+        }
 
         Mockito.verify(controlCenter, Mockito.times(2)).spinRobots(Mockito.same(robots));
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testReturnRobotsUsage(JsonParameterSet parameterSet) {
-        int worldWidth = parameterSet.get("worldWidth");
-        int worldHeight = parameterSet.get("worldHeight");
+    public void testReturnRobotsUsage(final JsonParameterSet parameterSet) {
+        final int worldWidth = parameterSet.get("worldWidth");
+        final int worldHeight = parameterSet.get("worldHeight");
         TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
 
-        CleanRobot[] robots = parameterSet.get("robots");
-        CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        Direction direction = parameterSet.get("direction");
-        int[][] coins = parameterSet.get("coins");
+        final CleanRobot[] robots = parameterSet.get("robots");
+        final CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        final Direction direction = parameterSet.get("direction");
+        final int[][] coins = parameterSet.get("coins");
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        boolean[][] coinPositions = getCoinPositions(coins);
-        var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
+        final boolean[][] coinPositions = getCoinPositions(coins);
+        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
 
-        var context = Assertions2.contextBuilder()
+        final var context = Assertions2.contextBuilder()
             .add("worldWidth", worldWidth)
             .add("worldHeight", worldHeight)
             .build();
 
-        ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
+        final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
 
-        var invalidInvocationMessage = new String[1];
+        final var invalidInvocationMessage = new String[1];
         Mockito.doAnswer((Answer<Object>) invocation -> {
             // This should be called when all robots are at the end of the world, but facing the opposite direction
             if (invalidInvocationMessage[0] == null) {
                 for (int i = 0; i < robotsReferenceCopy.length; i++) {
-                    var robot = robotsReferenceCopy[i];
+                    final var robot = robotsReferenceCopy[i];
                     var valid = (Direction.values()[(robot.getDirection().ordinal() + 2) % 4]) == direction;
                     valid &= firstEdgePositions[i].x() == robot.getX() && firstEdgePositions[i].y() == robot.getY();
 
                     if (!valid) {
-                        invalidInvocationMessage[0] = "The method `returnRobots` was not called when all robots were at the end of the world and spun around.";
+                        invalidInvocationMessage[0] = "The method `returnRobots` was not called when all robots were at"
+                            + " the end of the world and spun around.";
                         break;
                     }
                 }
             }
 
             // Solution impl for returnRobots
-            for (Robot robot : (Robot[]) invocation.getArgument(0)) {
-                while (robot.isFrontClear())
+            for (final Robot robot : (Robot[]) invocation.getArgument(0)) {
+                while (robot.isFrontClear()) {
                     robot.move();
+                }
             }
             return null;
         }).when(controlCenter).returnRobots(Mockito.any());
@@ -295,8 +315,9 @@ public class H4_3 implements IWorldSetup {
             r -> "The method `moveCleanRobots` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        if (invalidInvocationMessage[0] != null)
+        if (invalidInvocationMessage[0] != null) {
             Assertions2.fail(context, r -> invalidInvocationMessage[0]);
+        }
 
         Mockito.verify(controlCenter).returnRobots(Mockito.same(robots));
     }
@@ -308,8 +329,8 @@ public class H4_3 implements IWorldSetup {
      * @param coins The coin array to convert
      * @return The binarized coin array
      */
-    private static boolean[][] getCoinPositions(int[][] coins) {
-        boolean[][] coinPositions = new boolean[coins.length][coins[0].length];
+    private static boolean[][] getCoinPositions(final int[][] coins) {
+        final boolean[][] coinPositions = new boolean[coins.length][coins[0].length];
         for (int x = 0; x < coins.length; x++) {
             for (int y = 0; y < coins[x].length; y++) {
                 coinPositions[x][y] = coins[x][y] > 0;
@@ -318,10 +339,11 @@ public class H4_3 implements IWorldSetup {
         return coinPositions;
     }
 
-    private static H4Utils.Position[] getPositions(Robot[] robots) {
-        var positions = new H4Utils.Position[robots.length];
-        for (int i = 0; i < robots.length; i++)
+    private static H4Utils.Position[] getPositions(final Robot[] robots) {
+        final var positions = new H4Utils.Position[robots.length];
+        for (int i = 0; i < robots.length; i++) {
             positions[i] = new H4Utils.Position(robots[i].getX(), robots[i].getY());
+        }
         return positions;
     }
 }

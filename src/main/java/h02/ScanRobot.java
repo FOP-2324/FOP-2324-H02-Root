@@ -16,7 +16,7 @@ public class ScanRobot extends Robot {
      * @param direction     the {@link Direction} the {@link ScanRobot} is facing
      * @param numberOfCoins the number of coins the {@link ScanRobot} is holding
      */
-    public ScanRobot(int x, int y, Direction direction, int numberOfCoins) {
+    public ScanRobot(final int x, final int y, final Direction direction, final int numberOfCoins) {
         super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_RED);
     }
 

@@ -27,27 +27,31 @@ public class H4_1 implements IWorldSetup {
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRobotsFinalPosition(TestUtils.WorldSize worldSize, Context context) {
+    public void testRobotsFinalPosition(final TestUtils.WorldSize worldSize, final Context context) {
         testRobotMovement(worldSize, context, false);
     }
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRobotsPerformedOnlyMoveActions(TestUtils.WorldSize worldSize, Context context) {
+    public void testRobotsPerformedOnlyMoveActions(final TestUtils.WorldSize worldSize, final Context context) {
         testRobotMovement(worldSize, context, true);
     }
 
-    private static void testRobotMovement(TestUtils.WorldSize worldSize, Context context, boolean checkStrictMovement) {
+    private static void testRobotMovement(
+        final TestUtils.WorldSize worldSize,
+        final Context context,
+        final boolean checkStrictMovement
+    ) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        var random = TestUtils.random(worldSize);
+        final var random = TestUtils.random(worldSize);
 
-        var robotsPair = RobotArrayTestUtils.generateRobotArray(CleanRobot.class, random, worldSize);
-        var robots = robotsPair.getLeft();
-        var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        var robotsCopy = robotsPair.getRight();
+        final var robotsPair = RobotArrayTestUtils.generateRobotArray(CleanRobot.class, random, worldSize);
+        final var robots = robotsPair.getLeft();
+        final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        final var robotsCopy = robotsPair.getRight();
 
-        ControlCenter controlCenter = new ControlCenter();
+        final ControlCenter controlCenter = new ControlCenter();
 
         Assertions2.call(
             () -> controlCenter.returnRobots(robots),
@@ -73,11 +77,12 @@ public class H4_1 implements IWorldSetup {
 
         if (checkStrictMovement) {
             for (int i = 0; i < robotsReferenceCopy.length; i++) {
-                var robot = robotsReferenceCopy[i];
-                var trace = World.getGlobalWorld().getTrace(robot);
-                for (var transition : trace.getTransitions()) {
-                    if (transition.action == Transition.RobotAction.NONE)
+                final var robot = robotsReferenceCopy[i];
+                final var trace = World.getGlobalWorld().getTrace(robot);
+                for (final var transition : trace.getTransitions()) {
+                    if (transition.action == Transition.RobotAction.NONE) {
                         continue;
+                    }
 
                     Assertions2.assertEquals(
                         Transition.RobotAction.MOVE,

@@ -22,7 +22,7 @@ public class TestUtils {
     private static final long THE_SEED = 1234L;
 
     /**
-     * A "random" hand selected batch of varying world sizes for all tests
+     * A "random" hand selected batch of varying world sizes for all tests.
      */
     private static final List<Arguments> WORLD_SIZE_ARGUMENTS = Stream.of(
             new WorldSize(1, 1),
@@ -58,13 +58,14 @@ public class TestUtils {
             }
         ));
 
-    public static Random random(Object... magicValues) {
+    public static Random random(final Object... magicValues) {
         return new Random(Objects.hash(THE_SEED, Arrays.hashCode(magicValues)));
     }
 
-    public static void setWorldSizeAndActionLimit(int width, int height) {
+    public static void setWorldSizeAndActionLimit(final int width, final int height) {
         World.setSize(width, height);
         // Running the solution shows no action count higher than 165
+        //noinspection UnstableApiUsage
         World.getGlobalWorld().setActionLimit(TestUtils.ACTION_LIMIT);
     }
 
@@ -72,7 +73,14 @@ public class TestUtils {
         return WORLD_SIZE_ARGUMENTS.stream();
     }
 
-    public static int getCoinsOnField(int x, int y) {
+    /**
+     * Returns the number of coins on a given field.
+     *
+     * @param x the x coordinate of the field
+     * @param y the y coordinate of the field
+     * @return the number of coins on the field
+     */
+    public static int getCoinsOnField(final int x, final int y) {
         return World.getGlobalWorld().getAllFieldEntities().stream()
             .filter(entity -> entity.getX() == x && entity.getY() == y)
             .filter(entity -> entity instanceof Coin)
@@ -81,5 +89,6 @@ public class TestUtils {
             .sum();
     }
 
-    public record WorldSize(int width, int height) {}
+    public record WorldSize(int width, int height) {
+    }
 }

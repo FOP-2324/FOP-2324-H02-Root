@@ -16,19 +16,19 @@ public class H1_2 extends H1_AbstractTest {
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testArrayLength(TestUtils.WorldSize worldSize, Context context) {
+    public void testArrayLength(final TestUtils.WorldSize worldSize, final Context context) {
         testArrayLength(worldSize, context, RobotType.CLEAN);
     }
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRobotStates(TestUtils.WorldSize worldSize, Context context) {
+    public void testRobotStates(final TestUtils.WorldSize worldSize, final Context context) {
         testRobotStates(worldSize, context, RobotType.CLEAN);
     }
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testNoRobotsWithDuplicatePositions(TestUtils.WorldSize worldSize, Context context) {
+    public void testNoRobotsWithDuplicatePositions(final TestUtils.WorldSize worldSize, final Context context) {
         testNoRobotsWithDuplicatePositions(worldSize, context, RobotType.CLEAN);
     }
 }

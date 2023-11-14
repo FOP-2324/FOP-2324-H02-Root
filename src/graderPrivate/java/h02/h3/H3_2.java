@@ -31,16 +31,16 @@ public class H3_2 implements IWorldSetup {
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRotateRobots(TestUtils.WorldSize worldSize, Context context) {
+    public void testRotateRobots(final TestUtils.WorldSize worldSize, final Context context) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        var random = TestUtils.random(worldSize);
-        var robotArrays = RobotArrayTestUtils.generateRobotArray(Robot.class, random, worldSize);
-        var robots = robotArrays.getLeft();
-        var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        var robotsCopy = robotArrays.getRight();
+        final var random = TestUtils.random(worldSize);
+        final var robotArrays = RobotArrayTestUtils.generateRobotArray(Robot.class, random, worldSize);
+        final var robots = robotArrays.getLeft();
+        final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        final var robotsCopy = robotArrays.getRight();
 
-        var controlCenter = new ControlCenter();
+        final var controlCenter = new ControlCenter();
 
         Assertions2.call(
             () -> controlCenter.rotateRobots(robots),
@@ -66,19 +66,19 @@ public class H3_2 implements IWorldSetup {
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testCheckForDamageCalls(TestUtils.WorldSize worldSize, Context context) {
+    public void testCheckForDamageCalls(final TestUtils.WorldSize worldSize, final Context context) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        var random = TestUtils.random(worldSize);
-        var robotArrays = RobotArrayTestUtils.generateRobotArray(Robot.class, random, worldSize);
-        var robots = robotArrays.getLeft();
-        var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        var robotsCopy = robotArrays.getRight();
+        final var random = TestUtils.random(worldSize);
+        final var robotArrays = RobotArrayTestUtils.generateRobotArray(Robot.class, random, worldSize);
+        final var robots = robotArrays.getLeft();
+        final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+        final var robotsCopy = robotArrays.getRight();
 
-        var controlCenter = spy(new ControlCenter());
-        var checkForDamageCalls = new IdentityHashMap<Robot, Integer>();
+        final var controlCenter = spy(new ControlCenter());
+        final var checkForDamageCalls = new IdentityHashMap<Robot, Integer>();
         doAnswer(invocation -> {
-            var robot = (Robot) invocation.getArgument(0);
+            final var robot = (Robot) invocation.getArgument(0);
             checkForDamageCalls.merge(robot, 1, Integer::sum);
             return null;
         }).when(controlCenter).checkForDamage(any());

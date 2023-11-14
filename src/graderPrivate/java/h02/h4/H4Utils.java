@@ -30,28 +30,35 @@ public class H4Utils {
         )
     );
 
-    static Function<JsonNode, ?> robotConverter(Class<? extends Robot> robotClass) {
+    static Function<JsonNode, ?> robotConverter(final Class<? extends Robot> robotClass) {
         return (list) -> JsonConverters.toList(list, (node) -> {
-            var x = node.get("x").asInt();
-            var y = node.get("y").asInt();
+            final var x = node.get("x").asInt();
+            final var y = node.get("y").asInt();
             try {
-                return robotClass.getConstructor(int.class, int.class, Direction.class, int.class).newInstance(x, y, Direction.UP, 0);
-            } catch (Exception e) {
+                return robotClass.getConstructor(
+                    int.class,
+                    int.class,
+                    Direction.class,
+                    int.class
+                ).newInstance(x, y, Direction.UP, 0);
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         }).toArray(i -> (Object[]) Array.newInstance(robotClass, i));
     }
 
-    static void initRobotsAndWorld(Robot[] robots, Direction dir, int[][] coins) {
-        for (Robot robot : robots) {
-            while (robot.getDirection() != dir)
+    static void initRobotsAndWorld(final Robot[] robots, final Direction dir, final int[][] coins) {
+        for (final Robot robot : robots) {
+            while (robot.getDirection() != dir) {
                 robot.turnLeft();
+            }
         }
 
         for (int y = 0; y < coins.length; y++) {
             for (int x = 0; x < coins[y].length; x++) {
-                if (coins[y][x] > 0)
+                if (coins[y][x] > 0) {
                     World.putCoins(x, y, coins[y][x]);
+                }
             }
         }
     }
@@ -65,7 +72,7 @@ public class H4Utils {
      * @param worldHeight The height of the world
      * @return The final positions of the robots
      */
-    static Position[] getEndOfWorldRobotPositions(Robot[] robots, int worldWidth, int worldHeight) {
+    static Position[] getEndOfWorldRobotPositions(final Robot[] robots, final int worldWidth, final int worldHeight) {
         return Arrays.stream(robots)
             .map((robot) -> snapPositionToWorldEdge(
                 new Position(robot.getX(), robot.getY()),
@@ -73,7 +80,12 @@ public class H4Utils {
             )).toArray(Position[]::new);
     }
 
-    static Position[] getEndOfWorldPositions(Position[] positions, Direction direction, int worldWidth, int worldHeight) {
+    static Position[] getEndOfWorldPositions(
+        final Position[] positions,
+        final Direction direction,
+        final int worldWidth,
+        final int worldHeight
+    ) {
         return Arrays.stream(positions)
             .map((position) -> snapPositionToWorldEdge(
                 position,
@@ -81,14 +93,19 @@ public class H4Utils {
             )).toArray(Position[]::new);
     }
 
-    static Position snapPositionToWorldEdge(Position position, Direction direction, int worldWidth, int worldHeight) {
-        var x = switch (direction) {
+    static Position snapPositionToWorldEdge(
+        final Position position,
+        final Direction direction,
+        final int worldWidth,
+        final int worldHeight
+    ) {
+        final var x = switch (direction) {
             case UP, DOWN -> position.x();
             case LEFT -> 0;
             case RIGHT -> worldWidth - 1;
         };
 
-        var y = switch (direction) {
+        final var y = switch (direction) {
             case UP -> worldHeight - 1;
             case DOWN -> 0;
             case LEFT, RIGHT -> position.y();
@@ -105,17 +122,23 @@ public class H4Utils {
      * @param node             The node to convert
      * @param elementTypeClass The class of an element in the array (e.g. {@code int.class}
      * @param mapper           The mapper to convert the individual elements
-     * @param <ReturnType>     The type of the 2d array (e.g. {@code int[][]})
-     * @param <ElementType>    The type of element in the array (e.g. {@code Integer}, will be unboxed)
+     * @param <RT>             The type of the 2d array (e.g. {@code int[][]})
+     * @param <ET>             The type of element in the array (e.g. {@code Integer}, will be unboxed)
      * @return The 2d array represented by the given node
      */
-    static <ReturnType, ElementType> ReturnType to2dArray(JsonNode node, Class<ElementType> elementTypeClass, Function<JsonNode, ElementType> mapper) {
-        return (ReturnType) JsonConverters.toList(
+    @SuppressWarnings("unchecked")
+    static <RT, ET> RT to2dArray(
+        final JsonNode node,
+        final Class<ET> elementTypeClass,
+        final Function<JsonNode, ET> mapper
+    ) {
+        return (RT) JsonConverters.toList(
             node,
             (n) -> {
-                var array = Array.newInstance(elementTypeClass, n.size());
-                for (int i = 0; i < n.size(); i++)
+                final var array = Array.newInstance(elementTypeClass, n.size());
+                for (int i = 0; i < n.size(); i++) {
                     Array.set(array, i, mapper.apply(n.get(i)));
+                }
                 return array;
             }
         ).toArray((n) -> (Object[]) Array.newInstance(elementTypeClass, n, 0));
@@ -128,10 +151,10 @@ public class H4Utils {
      * @param <T>   The type of the array
      * @return The mirrored and transposed array
      */
-    static <T> T verticalMirrorArray(T array) {
-        var arrayLength = Array.getLength(array);
+    static <T> T verticalMirrorArray(final T array) {
+        final var arrayLength = Array.getLength(array);
         for (int y = 0; y < arrayLength / 2; y++) {
-            var tmp = Array.get(array, y);
+            final var tmp = Array.get(array, y);
             Array.set(array, y, Array.get(array, arrayLength - y - 1));
             Array.set(array, arrayLength - y - 1, tmp);
         }
@@ -151,8 +174,8 @@ public class H4Utils {
             InvocationOnMock::callRealMethod
         );
         Mockito.doAnswer((i) -> {
-            Robot[] robots = i.getArgument(0);
-            for (Robot robot : robots) {
+            final Robot[] robots = i.getArgument(0);
+            for (final Robot robot : robots) {
                 robot.turnLeft();
                 robot.turnLeft();
             }
@@ -161,10 +184,11 @@ public class H4Utils {
         }).when(controlCenter).spinRobots(Mockito.any());
 
         Mockito.doAnswer((i) -> {
-            Robot[] robots = i.getArgument(0);
-            for (Robot robot : robots) {
-                while (robot.isFrontClear())
+            final Robot[] robots = i.getArgument(0);
+            for (final Robot robot : robots) {
+                while (robot.isFrontClear()) {
                     robot.move();
+                }
             }
 
             return null;
@@ -174,8 +198,8 @@ public class H4Utils {
 
     record Position(int x, int y) {
 
-        public int manhattanDistance(Position other) {
-            return Math.abs(x - other.x) + Math.abs(y - other.y);
+        public int manhattanDistance(final Position other) {
+            return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
         }
     }
 }

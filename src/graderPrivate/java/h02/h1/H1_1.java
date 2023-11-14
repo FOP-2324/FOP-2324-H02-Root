@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
-import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 @TestForSubmission
@@ -17,19 +16,19 @@ public class H1_1 extends H1_AbstractTest {
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testArrayLength(TestUtils.WorldSize worldSize, Context context) {
+    public void testArrayLength(final TestUtils.WorldSize worldSize, final Context context) {
         testArrayLength(worldSize, context, RobotType.SCAN);
     }
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRobotStates(TestUtils.WorldSize worldSize, Context context) {
+    public void testRobotStates(final TestUtils.WorldSize worldSize, final Context context) {
         testRobotStates(worldSize, context, RobotType.SCAN);
     }
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testNoRobotsWithDuplicatePositions(TestUtils.WorldSize worldSize, Context context) {
+    public void testNoRobotsWithDuplicatePositions(final TestUtils.WorldSize worldSize, final Context context) {
         testNoRobotsWithDuplicatePositions(worldSize, context, RobotType.SCAN);
     }
 }

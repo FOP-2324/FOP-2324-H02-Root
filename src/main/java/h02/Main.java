@@ -12,12 +12,12 @@ public class Main {
      *
      * @param args program arguments, currently ignored
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         // define world dimensions
-        int numberOfRows = 15;
-        int numberOfColumns = 16;
+        final int numberOfRows = 15;
+        final int numberOfColumns = 16;
         // create an array for filling the world with some coins in a mysterious pattern
-        int[][] coins = new int[][]{
+        final int[][] coins = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
@@ -43,7 +43,7 @@ public class Main {
         // coins[2][9] = 2;
 
         // create a control center
-        ControlCenter controlCenter = new ControlCenter();
+        final ControlCenter controlCenter = new ControlCenter();
         // set the world dimensions
         World.setSize(numberOfColumns, numberOfRows);
         // don't draw turned off robots
@@ -61,11 +61,11 @@ public class Main {
     }
 
     /**
-     * Places coins in the world according to the provided array
+     * Places coins in the world according to the provided array.
      *
      * @param coins An array detailing how many coins to place in what position
      */
-    public static void placeCoinsInWorld(int[][] coins) {
+    public static void placeCoinsInWorld(final int[][] coins) {
         // H2
         for (int y = 0; y < coins.length; y++) {
             for (int x = 0; x < coins[y].length; x++) {

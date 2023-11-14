@@ -23,22 +23,22 @@ public class H2 implements IWorldSetup {
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testCoinPositions(TestUtils.WorldSize worldSize, Context context) {
+    public void testCoinPositions(final TestUtils.WorldSize worldSize, final Context context) {
         testCoins(worldSize, context, true);
     }
 
     @ParameterizedTest
     @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testCoinAmounts(TestUtils.WorldSize worldSize, Context context) {
+    public void testCoinAmounts(final TestUtils.WorldSize worldSize, final Context context) {
         testCoins(worldSize, context, false);
     }
 
-    private void testCoins(TestUtils.WorldSize worldSize, Context context, boolean normalizeAmounts) {
+    private void testCoins(final TestUtils.WorldSize worldSize, Context context, final boolean normalizeAmounts) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        var random = TestUtils.random(worldSize);
+        final var random = TestUtils.random(worldSize);
 
-        var coins = IntStream.range(0, worldSize.height()).sequential()
+        final var coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -55,8 +55,8 @@ public class H2 implements IWorldSetup {
 
         for (int y = 0; y < coins.length; y++) {
             for (int x = 0; x < coins[y].length; x++) {
-                var finalY = y;
-                var finalX = x;
+                final var finalY = y;
+                final var finalX = x;
 
                 Assertions2.assertEquals(
                     normalizeAmounts ? normalizeAmount(coins[y][x]) : coins[y][x],
@@ -68,7 +68,7 @@ public class H2 implements IWorldSetup {
         }
     }
 
-    private int normalizeAmount(int amount) {
+    private int normalizeAmount(final int amount) {
         return amount > 0 ? 1 : 0;
     }
 
@@ -79,12 +79,13 @@ public class H2 implements IWorldSetup {
      * @param coins The coins array in column major order
      * @return A string representing the coins array
      */
-    private String stringifyCoinGrid(int[][] coins) {
-        var builder = new StringBuilder();
+    private String stringifyCoinGrid(final int[][] coins) {
+        final var builder = new StringBuilder();
 
         for (int y = coins[0].length - 1; y >= 0; y--) {
-            for (int[] coin : coins)
+            for (final int[] coin : coins) {
                 builder.append(coin[y]).append(' ');
+            }
 
             builder.append("\n");
         }

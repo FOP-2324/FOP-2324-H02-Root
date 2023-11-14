@@ -24,12 +24,16 @@ public class H3_1 implements IWorldSetup {
 
     @Test
     public void testInvertRobotsArray() {
-        var controlCenter = new ControlCenter();
+        final var controlCenter = new ControlCenter();
 
         for (int i = 1; i <= 20; i++) {
-            var robotPair = RobotArrayTestUtils.generateRobotArray(Robot.class, TestUtils.random(i), new TestUtils.WorldSize(World.getWidth(), World.getHeight()));
-            var robots = robotPair.getLeft();
-            var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+            final var robotPair = RobotArrayTestUtils.generateRobotArray(
+                Robot.class,
+                TestUtils.random(i),
+                new TestUtils.WorldSize(World.getWidth(), World.getHeight())
+            );
+            final var robots = robotPair.getLeft();
+            final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
 
             Assertions2.call(
                 () -> controlCenter.reverseRobots(robots),
@@ -38,7 +42,7 @@ public class H3_1 implements IWorldSetup {
             );
 
             for (int j = 0; j < robots.length; j++) {
-                var finalJ = j;
+                final var finalJ = j;
 
                 Assertions2.assertSame(
                     robotsReferenceCopy[j],
@@ -52,13 +56,17 @@ public class H3_1 implements IWorldSetup {
 
     @Test
     public void testArrayHasSameElements() {
-        var controlCenter = new ControlCenter();
+        final var controlCenter = new ControlCenter();
 
         for (int i = 1; i <= 20; i++) {
-            var robotPair = RobotArrayTestUtils.generateRobotArray(Robot.class, TestUtils.random(i), new TestUtils.WorldSize(World.getWidth(), World.getHeight()));
-            var robots = robotPair.getLeft();
-            var robotsCopy = robotPair.getRight();
-            var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+            final var robotPair = RobotArrayTestUtils.generateRobotArray(
+                Robot.class,
+                TestUtils.random(i),
+                new TestUtils.WorldSize(World.getWidth(), World.getHeight())
+            );
+            final var robots = robotPair.getLeft();
+            final var robotsCopy = robotPair.getRight();
+            final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
 
             Assertions2.call(
                 () -> controlCenter.reverseRobots(robots),
@@ -82,13 +90,17 @@ public class H3_1 implements IWorldSetup {
 
     @Test
     public void testRobotsWereNotModified() {
-        var controlCenter = new ControlCenter();
+        final var controlCenter = new ControlCenter();
 
         for (int i = 1; i <= 20; i++) {
-            var robotPair = RobotArrayTestUtils.generateRobotArray(Robot.class, TestUtils.random(i), new TestUtils.WorldSize(World.getWidth(), World.getHeight()));
-            var robots = robotPair.getLeft();
-            var robotsCopy = robotPair.getRight();
-            var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
+            final var robotPair = RobotArrayTestUtils.generateRobotArray(
+                Robot.class,
+                TestUtils.random(i),
+                new TestUtils.WorldSize(World.getWidth(), World.getHeight())
+            );
+            final var robots = robotPair.getLeft();
+            final var robotsCopy = robotPair.getRight();
+            final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
 
             Assertions2.call(
                 () -> controlCenter.reverseRobots(robots),
@@ -98,7 +110,7 @@ public class H3_1 implements IWorldSetup {
 
             for (int j = 0; j < robotsReferenceCopy.length; j++) {
                 //check coins,direction,x,y
-                var finalJ = j;
+                final var finalJ = j;
 
                 Assertions2.assertEquals(
                     robotsReferenceCopy[j].getNumberOfCoins(),
