@@ -8,12 +8,14 @@ import h02.ControlCenter;
 import h02.IWorldSetup;
 import h02.ScanRobot;
 import h02.TestUtils;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.HashSet;
 import java.util.function.Function;
 
+@SkipAfterFirstFailedTest(TestUtils.SKIP_AFTER_FIRST_FAILED_TEST)
 public abstract class H1_AbstractTest implements IWorldSetup {
 
     public void testArrayLength(TestUtils.WorldSize worldSize, Context context, RobotType robotType) {

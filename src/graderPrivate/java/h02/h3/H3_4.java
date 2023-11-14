@@ -6,6 +6,7 @@ import h02.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 
 import static org.mockito.Mockito.any;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.same;
     value = TestUtils.TEST_TIMEOUT_IN_SECONDS,
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
+@SkipAfterFirstFailedTest(TestUtils.SKIP_AFTER_FIRST_FAILED_TEST)
 public class H3_4 {
 
     @Test

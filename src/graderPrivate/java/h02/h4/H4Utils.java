@@ -6,6 +6,7 @@ import fopbot.Robot;
 import fopbot.World;
 import h02.ControlCenter;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.tudalgo.algoutils.tutor.general.json.JsonConverters;
 
 import java.lang.reflect.Array;
@@ -145,7 +146,10 @@ public class H4Utils {
      * @return The mocked instance
      */
     static ControlCenter mockReturnAndSpinRobots() {
-        ControlCenter controlCenter = Mockito.mock(Mockito.withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS));
+        final ControlCenter controlCenter = Mockito.mock(
+            ControlCenter.class,
+            InvocationOnMock::callRealMethod
+        );
         Mockito.doAnswer((i) -> {
             Robot[] robots = i.getArgument(0);
             for (Robot robot : robots) {

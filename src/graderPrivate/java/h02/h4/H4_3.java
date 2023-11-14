@@ -14,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
@@ -29,6 +30,7 @@ import java.util.function.Function;
     value = TestUtils.TEST_TIMEOUT_IN_SECONDS,
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
+@SkipAfterFirstFailedTest(TestUtils.SKIP_AFTER_FIRST_FAILED_TEST)
 public class H4_3 implements IWorldSetup {
 
     public static final Map<String, Function<JsonNode, ?>> CUSTOM_CONVERTERS = new HashMap<>(H4Utils.CUSTOM_CONVERTERS);

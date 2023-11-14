@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
@@ -22,6 +23,7 @@ import java.util.List;
     value = TestUtils.TEST_TIMEOUT_IN_SECONDS,
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
+@SkipAfterFirstFailedTest(TestUtils.SKIP_AFTER_FIRST_FAILED_TEST)
 public class H3_3 implements IWorldSetup {
 
     private static final RobotArrayTestUtils.RobotArrayElementVerifier ROBOT_REPLACED_VERIFIER = ((context, newRobot, referenceCopy, copy) -> {
