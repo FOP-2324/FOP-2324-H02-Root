@@ -1,0 +1,80 @@
+[
+  {
+    "worldWidth": 5,
+    "worldHeight": 5,
+    "direction": "LEFT",
+    "robots": [
+      {
+        "x": 3,
+        "y": 0
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 4
+      }
+    ],
+    "coins": [
+      [0, 1, 0, 1, 0],
+      [0, 0, 0, 0, 5],
+      [0, 2, 2, 4, 0],
+      [0, 2, 2, 0, 0],
+      [2, 0, 0, 0, 1]
+    ],
+    "expected": [
+      [false, true , false, false, false],
+      [false, false, false, false, false],
+      [false, true , true , false, false],
+      [false, true , true , false, false],
+      [true , false, false, false, false]
+    ]
+  },
+  {
+    "worldWidth": 5,
+    "worldHeight": 7,
+    "direction": "DOWN",
+    "robots": [
+      {
+        "x": 0,
+        "y": 4
+      },
+      {
+        "x": 1,
+        "y": 4
+      },
+      {
+        "x": 2,
+        "y": 4
+      },
+      {
+        "x": 4,
+        "y": 4
+      }
+    ],
+    "coins": [
+      [3, 1, 0, 1, 0],
+      [0, 0, 0, 0, 3],
+      [1, 1, 0, 2, 0],
+      [0, 0, 0, 0, 0],
+      [1, 1, 1, 5, 0],
+      [0, 0, 0, 0, 1],
+      [0, 9, 0, 0, 1]
+    ],
+    "expected": [
+      [false, false, false, false, false],
+      [false, false, false, false, false],
+      [false, false, false, false, false],
+      [false, false, false, false, false],
+      [true, true, true, false, false],
+      [false, false, false, false, true],
+      [false, true, false, false, true]
+    ]
+  }
+]

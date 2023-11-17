@@ -233,18 +233,17 @@ public class H02_RubricProvider implements RubricProvider {
                                 ))
                             ),
                             criterion(
-                                "Die Methode spinRobots wird korrekt verwendet.",
-                                JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod(
-                                    "testSpinRobotsUsage",
-                                    JsonParameterSet.class
-                                ))
-                            ),
-                            criterion(
-                                "Die Methode returnRobots wird korrekt verwendet.",
-                                JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod(
-                                    "testReturnRobotsUsage",
-                                    JsonParameterSet.class
-                                ))
+                                "Die Methoden spinRobots und returnRobots werden korrekt verwendet.",
+                                JUnitTestRef.and(
+                                    JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod(
+                                        "testSpinRobotsUsage",
+                                        JsonParameterSet.class
+                                    )),
+                                    JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod(
+                                        "testReturnRobotsUsage",
+                                        JsonParameterSet.class
+                                    ))
+                                )
                             ),
                             criterion(
                                 "Die Roboter stehen nach Ende der Methode wieder an der richtigen Position"
@@ -253,6 +252,20 @@ public class H02_RubricProvider implements RubricProvider {
                                     "testRobotsFinalPositionAndDirection",
                                     JsonParameterSet.class
                                 ))
+                            ),
+                            criterion(
+                                "Die Methode funktioniert unabhängig von Roboter Startposition und "
+                                + "Ausrichtung.",
+                                JUnitTestRef.and(
+                                    JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod(
+                                        "testResultArrayEntriesCorrectAdvanced",
+                                        JsonParameterSet.class
+                                    )),
+                                    JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod(
+                                        "testRobotsFinalPositionAndDirectionAdvanced",
+                                        JsonParameterSet.class
+                                    ))
+                                )
                             )
                         )
                         .build(),
@@ -281,18 +294,33 @@ public class H02_RubricProvider implements RubricProvider {
                                 ))
                             ),
                             criterion(
-                                "Die Methode spinRobots wird korrekt verwendet.",
-                                JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod(
-                                    "testSpinRobotsUsage",
-                                    JsonParameterSet.class
-                                ))
+                                "Die Methoden spinRobots und returnRobots werden korrekt verwendet.",
+                                JUnitTestRef.and(
+                                    JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod(
+                                        "testSpinRobotsUsage",
+                                        JsonParameterSet.class
+                                    )),
+                                    JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod(
+                                        "testReturnRobotsUsage",
+                                        JsonParameterSet.class
+                                    ))
+                                )
                             ),
                             criterion(
-                                "Die Methode returnRobots wird korrekt verwendet.",
-                                JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod(
-                                    "testReturnRobotsUsage",
-                                    JsonParameterSet.class
-                                ))
+                                "Die Methode funktioniert unabhängig von Roboter Startposition und "
+                                    + "Ausrichtung.",
+                                JUnitTestRef.and(
+                                    JUnitTestRef.and(
+                                        JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod(
+                                            "testPickedUpCoinAmountsExactAdvanced",
+                                            JsonParameterSet.class
+                                        )),
+                                        JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod(
+                                            "testRobotMovementAdvanced",
+                                            JsonParameterSet.class
+                                        ))
+                                    )
+                                )
                             )
                         )
                         .build()

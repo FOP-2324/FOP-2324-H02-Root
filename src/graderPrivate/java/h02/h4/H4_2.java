@@ -351,4 +351,16 @@ public class H4_2 implements IWorldSetup {
             );
         }
     }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "H4_advancedtestCases.json", customConverters = "CUSTOM_CONVERTERS")
+    public void testRobotsFinalPositionAndDirectionAdvanced(final JsonParameterSet parameterSet) {
+        testRobotsFinalPositionAndDirection(parameterSet);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "H4_advancedtestCases.json", customConverters = "CUSTOM_CONVERTERS")
+    public void testResultArrayEntriesCorrectAdvanced(final JsonParameterSet parameterSet) {
+        testResultArrayEntriesCorrect(parameterSet);
+    }
 }

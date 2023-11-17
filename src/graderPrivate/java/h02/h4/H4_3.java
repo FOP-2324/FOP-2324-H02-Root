@@ -92,11 +92,18 @@ public class H4_3 implements IWorldSetup {
                         context,
                         r -> "The coin amount at position (%d, %d) was incorrect.".formatted(finalX, finalY)
                     );
-                } else {
+                } else if (expected[y][x]) {
                     Assertions2.assertTrue(
-                        expected[y][x] ? coinsOnField < coins[y][x] : coinsOnField == coins[y][x],
+                        coinsOnField < coins[y][x],
                         context,
                         r -> "No coin was picked up at the position (%d, %d).".formatted(finalX, finalY)
+                    );
+                } else {
+                    Assertions2.assertEquals(
+                        coins[y][x],
+                        coinsOnField,
+                        context,
+                        r -> "The coin amount at position (%d, %d) was incorrect.".formatted(finalX, finalY)
                     );
                 }
             }
@@ -320,6 +327,18 @@ public class H4_3 implements IWorldSetup {
         }
 
         Mockito.verify(controlCenter).returnRobots(Mockito.same(robots));
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "H4_advancedtestCases.json", customConverters = "CUSTOM_CONVERTERS")
+    public void testPickedUpCoinAmountsExactAdvanced(final JsonParameterSet parameterSet) {
+        testPickedUpCoinAmountsExact(parameterSet);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "H4_advancedtestCases.json", customConverters = "CUSTOM_CONVERTERS")
+    public void testRobotMovementAdvanced(final JsonParameterSet parameterSet) {
+        testRobotMovement(parameterSet);
     }
 
     /**
