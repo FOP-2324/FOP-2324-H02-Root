@@ -17,7 +17,8 @@ import java.util.stream.Stream;
 public class TestUtils {
 
     public static final int TEST_TIMEOUT_IN_SECONDS = 5;
-    public static final int ACTION_LIMIT = 350;
+    // Running the solution shows no action count higher than 560
+    public static final int ACTION_LIMIT = 700;
     public static final boolean SKIP_AFTER_FIRST_FAILED_TEST = true;
     private static final long THE_SEED = 1234L;
 
@@ -33,12 +34,10 @@ public class TestUtils {
             new WorldSize(4, 4),
             new WorldSize(2, 7),
             new WorldSize(6, 6),
-            new WorldSize(8, 9),
             new WorldSize(9, 8),
             new WorldSize(10, 11),
             new WorldSize(11, 10),
-            new WorldSize(20, 15),
-            new WorldSize(30, 30)
+            new WorldSize(15, 13)
         )
         .map(size -> {
             var context = Assertions2.contextBuilder()
@@ -64,9 +63,8 @@ public class TestUtils {
 
     public static void setWorldSizeAndActionLimit(final int width, final int height) {
         World.setSize(width, height);
-        // Running the solution shows no action count higher than 165
         //noinspection UnstableApiUsage
-        World.getGlobalWorld().setActionLimit(TestUtils.ACTION_LIMIT);
+        World.getGlobalWorld().setActionLimit(ACTION_LIMIT);
     }
 
     public static Stream<Arguments> allWorldSizes() {

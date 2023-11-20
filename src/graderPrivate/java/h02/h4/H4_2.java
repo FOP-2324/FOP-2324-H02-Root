@@ -1,6 +1,5 @@
 package h02.h4;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.Robot;
 import h02.ControlCenter;
@@ -9,19 +8,17 @@ import h02.ScanRobot;
 import h02.TestUtils;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
-import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
-import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.stream.IntStream;
 
 @TestForSubmission
 @Timeout(
@@ -31,28 +28,25 @@ import java.util.function.Function;
 @SkipAfterFirstFailedTest(TestUtils.SKIP_AFTER_FIRST_FAILED_TEST)
 public class H4_2 implements IWorldSetup {
 
-    public static final Map<String, Function<JsonNode, ?>> CUSTOM_CONVERTERS = new HashMap<>(H4Utils.CUSTOM_CONVERTERS);
-
-    static {
-        CUSTOM_CONVERTERS.put("robots", H4Utils.robotConverter(ScanRobot.class));
-    }
-
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testArrayDimensions(final JsonParameterSet parameterSet) {
-        final int worldWidth = parameterSet.get("worldWidth");
-        final int worldHeight = parameterSet.get("worldHeight");
-        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testArrayDimensions(final TestUtils.WorldSize worldSize) {
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = parameterSet.get("robots");
-        final Direction direction = parameterSet.get("direction");
-        final int[][] coins = parameterSet.get("coins");
+        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+            .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
+            .toArray(ScanRobot[]::new);;
+        final Direction direction = Direction.UP;
+        final Random random = TestUtils.random(worldSize);
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+            .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
+            .toArray(int[][]::new);
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
         final var context = Assertions2.contextBuilder()
-            .add("worldWidth", worldWidth)
-            .add("worldHeight", worldHeight)
+            .add("worldWidth", worldSize.width())
+            .add("worldHeight", worldSize.height())
             .build();
 
         final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
@@ -70,7 +64,7 @@ public class H4_2 implements IWorldSetup {
         );
 
         Assertions2.assertEquals(
-            worldHeight,
+            worldSize.height(),
             result.length,
             context,
             r -> "The method `scanWorld` returned an array with the wrong width."
@@ -84,7 +78,7 @@ public class H4_2 implements IWorldSetup {
             );
 
             Assertions2.assertEquals(
-                worldWidth,
+                worldSize.width(),
                 columns.length,
                 context,
                 r -> "The method `scanWorld` returned a column array with the wrong height."
@@ -93,22 +87,24 @@ public class H4_2 implements IWorldSetup {
     }
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testResultArrayEntriesCorrect(final JsonParameterSet parameterSet) {
-        final int worldWidth = parameterSet.get("worldWidth");
-        final int worldHeight = parameterSet.get("worldHeight");
-        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testResultArrayEntriesCorrect(final TestUtils.WorldSize worldSize) {
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = parameterSet.get("robots");
-        final Direction direction = parameterSet.get("direction");
-        final int[][] coins = parameterSet.get("coins");
-        final boolean[][] expected = parameterSet.get("expected");
+        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+            .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
+            .toArray(ScanRobot[]::new);;
+        final Direction direction = Direction.UP;
+        final Random random = TestUtils.random(worldSize);
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+            .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
+            .toArray(int[][]::new);
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
         final var context = Assertions2.contextBuilder()
-            .add("worldWidth", worldWidth)
-            .add("worldHeight", worldHeight)
+            .add("worldWidth", worldSize.width())
+            .add("worldHeight", worldSize.height())
             .build();
 
         final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
@@ -131,8 +127,9 @@ public class H4_2 implements IWorldSetup {
                 final var finalX = x;
 
                 try {
+                    final var expected = y != 0 && coins[y][x] > 0;
                     Assertions2.assertEquals(
-                        expected[y][x],
+                        expected,
                         result[y][x],
                         context,
                         r -> "The method `scanWorld` returned an array with the wrong value at position (%d, %d)."
@@ -149,30 +146,32 @@ public class H4_2 implements IWorldSetup {
     }
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testSpinRobotsUsage(final JsonParameterSet parameterSet) {
-        final int worldWidth = parameterSet.get("worldWidth");
-        final int worldHeight = parameterSet.get("worldHeight");
-        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testSpinRobotsUsage(final TestUtils.WorldSize worldSize) {
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = parameterSet.get("robots");
+        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+            .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
+            .toArray(ScanRobot[]::new);
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        final Direction direction = parameterSet.get("direction");
-        final int[][] coins = parameterSet.get("coins");
+        final Direction direction = Direction.UP;
+        final Random random = TestUtils.random(worldSize);
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+            .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
+            .toArray(int[][]::new);
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
+        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldSize.width(), worldSize.height());
         final var secondEdgePositions = H4Utils.getEndOfWorldPositions(
             firstEdgePositions,
             Direction.values()[(direction.ordinal() + 2) % 4],
-            worldWidth,
-            worldHeight
+            worldSize.width(), worldSize.height()
         );
 
         final var context = Assertions2.contextBuilder()
-            .add("worldWidth", worldWidth)
-            .add("worldHeight", worldHeight)
+            .add("worldWidth", worldSize.width())
+            .add("worldHeight", worldSize.height())
             .build();
 
         final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
@@ -232,24 +231,27 @@ public class H4_2 implements IWorldSetup {
     }
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testReturnRobotsUsage(final JsonParameterSet parameterSet) {
-        final int worldWidth = parameterSet.get("worldWidth");
-        final int worldHeight = parameterSet.get("worldHeight");
-        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testReturnRobotsUsage(final TestUtils.WorldSize worldSize) {
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = parameterSet.get("robots");
+        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+            .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
+            .toArray(ScanRobot[]::new);
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        final Direction direction = parameterSet.get("direction");
-        final int[][] coins = parameterSet.get("coins");
+        final Direction direction = Direction.UP;
+        final Random random = TestUtils.random(worldSize);
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+            .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
+            .toArray(int[][]::new);
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
-        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight);
+        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldSize.width(), worldSize.height());
 
         final var context = Assertions2.contextBuilder()
-            .add("worldWidth", worldWidth)
-            .add("worldHeight", worldHeight)
+            .add("worldWidth", worldSize.width())
+            .add("worldHeight", worldSize.height())
             .build();
 
         final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
@@ -294,28 +296,31 @@ public class H4_2 implements IWorldSetup {
     }
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_testCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testRobotsFinalPositionAndDirection(final JsonParameterSet parameterSet) {
-        final int worldWidth = parameterSet.get("worldWidth");
-        final int worldHeight = parameterSet.get("worldHeight");
-        TestUtils.setWorldSizeAndActionLimit(worldWidth, worldHeight);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testRobotsFinalPositionAndDirection(final TestUtils.WorldSize worldSize) {
+        TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = parameterSet.get("robots");
+        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+            .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
+            .toArray(ScanRobot[]::new);
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        final Direction direction = parameterSet.get("direction");
-        final int[][] coins = parameterSet.get("coins");
+        final Direction direction = Direction.UP;
+        final Random random = TestUtils.random(worldSize);
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+            .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
+            .toArray(int[][]::new);
 
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
         final var finalPositions = H4Utils.getEndOfWorldPositions(
-            H4Utils.getEndOfWorldRobotPositions(robots, worldWidth, worldHeight),
+            H4Utils.getEndOfWorldRobotPositions(robots, worldSize.width(), worldSize.height()),
             Direction.values()[(direction.ordinal() + 2) % 4],
-            worldWidth, worldHeight
+            worldSize.width(), worldSize.height()
         );
 
         final var context = Assertions2.contextBuilder()
-            .add("worldWidth", worldWidth)
-            .add("worldHeight", worldHeight)
+            .add("worldWidth", worldSize.width())
+            .add("worldHeight", worldSize.height())
             .build();
 
         final ControlCenter controlCenter = H4Utils.mockReturnAndSpinRobots();
@@ -353,14 +358,14 @@ public class H4_2 implements IWorldSetup {
     }
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_advancedtestCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testRobotsFinalPositionAndDirectionAdvanced(final JsonParameterSet parameterSet) {
-        testRobotsFinalPositionAndDirection(parameterSet);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testRobotsFinalPositionAndDirectionAdvanced(final TestUtils.WorldSize worldSize) {
+        testRobotsFinalPositionAndDirection(worldSize);
     }
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H4_advancedtestCases.json", customConverters = "CUSTOM_CONVERTERS")
-    public void testResultArrayEntriesCorrectAdvanced(final JsonParameterSet parameterSet) {
-        testResultArrayEntriesCorrect(parameterSet);
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testResultArrayEntriesCorrectAdvanced(final TestUtils.WorldSize worldSize) {
+        testResultArrayEntriesCorrect(worldSize);
     }
 }

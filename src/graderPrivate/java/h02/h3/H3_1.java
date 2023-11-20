@@ -38,7 +38,7 @@ public class H3_1 implements IWorldSetup {
             Assertions2.call(
                 () -> controlCenter.reverseRobots(robots),
                 Assertions2.emptyContext(),
-                r -> "The method `invertRobots` threw an exception: %s".formatted(r.cause().toString())
+                r -> "The method `reverseRobots` threw an exception: %s".formatted(r.cause().toString())
             );
 
             for (int j = 0; j < robots.length; j++) {
@@ -71,7 +71,7 @@ public class H3_1 implements IWorldSetup {
             Assertions2.call(
                 () -> controlCenter.reverseRobots(robots),
                 Assertions2.emptyContext(),
-                r -> "The method `invertRobots` threw an exception: %s".formatted(r.cause().toString())
+                r -> "The method `reverseRobots` threw an exception: %s".formatted(r.cause().toString())
             );
 
             RobotArrayTestUtils.assertRobotArrayWasModifiedCorrectly(
@@ -105,7 +105,7 @@ public class H3_1 implements IWorldSetup {
             Assertions2.call(
                 () -> controlCenter.reverseRobots(robots),
                 Assertions2.emptyContext(),
-                r -> "The method `invertRobots` threw an exception: %s".formatted(r.cause().toString())
+                r -> "The method `reverseRobots` threw an exception: %s".formatted(r.cause().toString())
             );
 
             for (int j = 0; j < robotsReferenceCopy.length; j++) {

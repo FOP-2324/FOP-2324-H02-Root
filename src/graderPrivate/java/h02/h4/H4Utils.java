@@ -1,51 +1,15 @@
 package h02.h4;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.World;
 import h02.ControlCenter;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
-import org.tudalgo.algoutils.tutor.general.json.JsonConverters;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
 
 public class H4Utils {
-
-    static final Map<String, Function<JsonNode, ?>> CUSTOM_CONVERTERS = Map.ofEntries(
-        Map.entry("worldWidth", JsonNode::asInt),
-        Map.entry("worldHeight", JsonNode::asInt),
-        Map.entry("direction", (n) -> Direction.valueOf(n.asText())),
-        Map.entry(
-            "coins",
-            (list) -> verticalMirrorArray(to2dArray(list, int.class, JsonNode::asInt))
-        ),
-        Map.entry(
-            "expected",
-            (list) -> verticalMirrorArray(to2dArray(list, boolean.class, JsonNode::asBoolean))
-        )
-    );
-
-    static Function<JsonNode, ?> robotConverter(final Class<? extends Robot> robotClass) {
-        return (list) -> JsonConverters.toList(list, (node) -> {
-            final var x = node.get("x").asInt();
-            final var y = node.get("y").asInt();
-            try {
-                return robotClass.getConstructor(
-                    int.class,
-                    int.class,
-                    Direction.class,
-                    int.class
-                ).newInstance(x, y, Direction.UP, 0);
-            } catch (final Exception e) {
-                throw new RuntimeException(e);
-            }
-        }).toArray(i -> (Object[]) Array.newInstance(robotClass, i));
-    }
 
     static void initRobotsAndWorld(final Robot[] robots, final Direction dir, final int[][] coins) {
         for (final Robot robot : robots) {
@@ -112,54 +76,6 @@ public class H4Utils {
         };
 
         return new Position(x, y);
-    }
-
-    /**
-     * Converts the given JsonNode to a 2d array of the given type, using the given mapper to convert the individual
-     * elements. All operations here are unchecked, so make sure to only use this method with the correct parameters
-     * and assigning the result to the correct type.
-     *
-     * @param node             The node to convert
-     * @param elementTypeClass The class of an element in the array (e.g. {@code int.class}
-     * @param mapper           The mapper to convert the individual elements
-     * @param <RT>             The type of the 2d array (e.g. {@code int[][]})
-     * @param <ET>             The type of element in the array (e.g. {@code Integer}, will be unboxed)
-     * @return The 2d array represented by the given node
-     */
-    @SuppressWarnings("unchecked")
-    static <RT, ET> RT to2dArray(
-        final JsonNode node,
-        final Class<ET> elementTypeClass,
-        final Function<JsonNode, ET> mapper
-    ) {
-        return (RT) JsonConverters.toList(
-            node,
-            (n) -> {
-                final var array = Array.newInstance(elementTypeClass, n.size());
-                for (int i = 0; i < n.size(); i++) {
-                    Array.set(array, i, mapper.apply(n.get(i)));
-                }
-                return array;
-            }
-        ).toArray((n) -> (Object[]) Array.newInstance(elementTypeClass, n, 0));
-    }
-
-    /**
-     * Transposes the given 2d array horizontally and then transposes it.
-     *
-     * @param array The array to mirror and transpose
-     * @param <T>   The type of the array
-     * @return The mirrored and transposed array
-     */
-    static <T> T verticalMirrorArray(final T array) {
-        final var arrayLength = Array.getLength(array);
-        for (int y = 0; y < arrayLength / 2; y++) {
-            final var tmp = Array.get(array, y);
-            Array.set(array, y, Array.get(array, arrayLength - y - 1));
-            Array.set(array, arrayLength - y - 1, tmp);
-        }
-
-        return array;
     }
 
     /**

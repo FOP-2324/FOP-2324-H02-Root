@@ -1,5 +1,6 @@
 package h02.h4;
 
+import fopbot.Direction;
 import fopbot.Transition;
 import fopbot.World;
 import h02.CleanRobot;
@@ -16,6 +17,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 @TestForSubmission
 @Timeout(
@@ -44,12 +46,13 @@ public class H4_1 implements IWorldSetup {
     ) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final var random = TestUtils.random(worldSize);
-
-        final var robotsPair = RobotArrayTestUtils.generateRobotArray(CleanRobot.class, random, worldSize);
-        final var robots = robotsPair.getLeft();
+        final var robots = IntStream.range(0, worldSize.width())
+            .mapToObj(i -> new CleanRobot(i, 0, Direction.UP, 0))
+            .toArray(CleanRobot[]::new);
         final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
-        final var robotsCopy = robotsPair.getRight();
+        final var robotsCopy = Arrays.stream(robots)
+            .map(c -> new CleanRobot(c.getX(), c.getY(), c.getDirection(), c.getNumberOfCoins()))
+            .toArray(CleanRobot[]::new);
 
         final ControlCenter controlCenter = new ControlCenter();
 

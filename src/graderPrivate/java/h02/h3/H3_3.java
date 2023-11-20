@@ -115,7 +115,7 @@ public class H3_3 implements IWorldSetup {
 
         Assertions2.call(
             // NOTE: We supply neither a ScanRobot[] nor a CleanRobot[] here, but a Robot[]. Otherwise, if the student
-            // did implement criterion 3 correctly, all tests would crash.
+            // didn't implement criterion 3 correctly, all tests would crash.
             () -> controlCenter.replaceBrokenRobots(robots),
             context,
             r -> "The method `replaceDisabledRobots` threw an exception: %s".formatted(r.cause().toString())
