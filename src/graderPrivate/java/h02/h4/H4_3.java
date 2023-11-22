@@ -330,18 +330,6 @@ public class H4_3 implements IWorldSetup {
         Mockito.verify(controlCenter).returnRobots(Mockito.same(robots));
     }
 
-    @ParameterizedTest
-    @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testPickedUpCoinAmountsExactAdvanced(final TestUtils.WorldSize worldSize) {
-        testPickedUpCoinAmountsExact(worldSize);
-    }
-
-    @ParameterizedTest
-    @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRobotMovementAdvanced(final TestUtils.WorldSize worldSize) {
-        testRobotMovement(worldSize);
-    }
-
     /**
      * Converts the given coin array to a boolean array, where an entry in the result is {@code true} iff. the coin
      * amount at the corresponding position in the given array is greater than 0.

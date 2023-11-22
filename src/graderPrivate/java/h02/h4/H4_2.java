@@ -356,16 +356,4 @@ public class H4_2 implements IWorldSetup {
             );
         }
     }
-
-    @ParameterizedTest
-    @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testRobotsFinalPositionAndDirectionAdvanced(final TestUtils.WorldSize worldSize) {
-        testRobotsFinalPositionAndDirection(worldSize);
-    }
-
-    @ParameterizedTest
-    @MethodSource("h02.TestUtils#allWorldSizes")
-    public void testResultArrayEntriesCorrectAdvanced(final TestUtils.WorldSize worldSize) {
-        testResultArrayEntriesCorrect(worldSize);
-    }
 }
