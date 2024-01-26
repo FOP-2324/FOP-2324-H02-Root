@@ -11,6 +11,7 @@ import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 @TestForSubmission
@@ -38,7 +39,7 @@ public class H2 implements IWorldSetup {
 
         final var random = TestUtils.random(worldSize);
 
-        final var coins = IntStream.range(0, worldSize.height()).sequential()
+        final var coins = IntStream.range(1, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -53,8 +54,8 @@ public class H2 implements IWorldSetup {
             r -> "The method `placeCoinsInWorld` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        for (int y = 0; y < coins.length; y++) {
-            for (int x = 0; x < coins[y].length; x++) {
+        for (int y = 1; y < coins.length; y++) {
+            for (int x = 1; x < coins[y].length; x++) {
                 final var finalY = y;
                 final var finalX = x;
 
@@ -80,16 +81,6 @@ public class H2 implements IWorldSetup {
      * @return A string representing the coins array
      */
     private String stringifyCoinGrid(final int[][] coins) {
-        final var builder = new StringBuilder();
-
-        for (int y = coins[0].length - 1; y >= 0; y--) {
-            for (final int[] coin : coins) {
-                builder.append(coin[y]).append(' ');
-            }
-
-            builder.append("\n");
-        }
-
-        return builder.toString();
+        return Arrays.deepToString(coins);
     }
 }

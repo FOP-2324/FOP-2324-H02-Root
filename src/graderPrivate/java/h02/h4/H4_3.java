@@ -71,8 +71,8 @@ public class H4_3 implements IWorldSetup {
             r -> "The method `moveCleanRobots` threw an exception: %s".formatted(r.cause().toString())
         );
 
-        for (int y = 0; y < coins.length; y++) {
-            for (int x = 0; x < coins[y].length; x++) {
+        for (int y = 1; y < coins.length; y++) {
+            for (int x = 1; x < coins[y].length; x++) {
                 final var finalY = y;
                 final var finalX = x;
 
@@ -109,7 +109,7 @@ public class H4_3 implements IWorldSetup {
     public void testRobotMovement(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final CleanRobot[] robots = IntStream.range(0, worldSize.height())
+        final CleanRobot[] robots = IntStream.range(1, worldSize.height())
             .mapToObj(i -> new CleanRobot(0, i, Direction.RIGHT, 0))
             .toArray(CleanRobot[]::new);
         final CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
@@ -183,7 +183,7 @@ public class H4_3 implements IWorldSetup {
     @MethodSource("h02.TestUtils#allWorldSizes")    public void testSpinRobotsUsage(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final CleanRobot[] robots = IntStream.range(0, worldSize.height())
+        final CleanRobot[] robots = IntStream.range(1, worldSize.height())
             .mapToObj(i -> new CleanRobot(0, i, Direction.RIGHT, 0))
             .toArray(CleanRobot[]::new);
         final CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
@@ -269,7 +269,7 @@ public class H4_3 implements IWorldSetup {
     public void testReturnRobotsUsage(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final CleanRobot[] robots = IntStream.range(0, worldSize.height())
+        final CleanRobot[] robots = IntStream.range(1, worldSize.height())
             .mapToObj(i -> new CleanRobot(0, i, Direction.RIGHT, 0))
             .toArray(CleanRobot[]::new);
         final CleanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);

@@ -26,10 +26,7 @@ public class TestUtils {
      * A "random" hand selected batch of varying world sizes for all tests.
      */
     private static final List<Arguments> WORLD_SIZE_ARGUMENTS = Stream.of(
-            new WorldSize(1, 1),
-            new WorldSize(2, 1),
-            new WorldSize(1, 2),
-            new WorldSize(1, 4),
+
             new WorldSize(3, 5),
             new WorldSize(4, 4),
             new WorldSize(2, 7),

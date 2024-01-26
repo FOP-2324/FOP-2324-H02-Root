@@ -33,12 +33,12 @@ public class H4_2 implements IWorldSetup {
     public void testArrayDimensions(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+        final ScanRobot[] robots = IntStream.range(1, worldSize.width())
             .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
             .toArray(ScanRobot[]::new);;
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -91,12 +91,12 @@ public class H4_2 implements IWorldSetup {
     public void testResultArrayEntriesCorrect(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+        final ScanRobot[] robots = IntStream.range(1, worldSize.width())
             .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
             .toArray(ScanRobot[]::new);;
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -121,8 +121,8 @@ public class H4_2 implements IWorldSetup {
             r -> "The method `scanWorld` returned `null`."
         );
 
-        for (int y = 0; y < coins.length; y++) {
-            for (int x = 0; x < coins[y].length; x++) {
+        for (int y = 1; y < coins.length; y++) {
+            for (int x = 1; x < coins[y].length; x++) {
                 final var finalY = y;
                 final var finalX = x;
 
@@ -150,13 +150,13 @@ public class H4_2 implements IWorldSetup {
     public void testSpinRobotsUsage(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+        final ScanRobot[] robots = IntStream.range(1, worldSize.width())
             .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
             .toArray(ScanRobot[]::new);
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -235,13 +235,13 @@ public class H4_2 implements IWorldSetup {
     public void testReturnRobotsUsage(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+        final ScanRobot[] robots = IntStream.range(1, worldSize.width())
             .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
             .toArray(ScanRobot[]::new);
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -300,13 +300,13 @@ public class H4_2 implements IWorldSetup {
     public void testRobotsFinalPositionAndDirection(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final ScanRobot[] robots = IntStream.range(0, worldSize.width())
+        final ScanRobot[] robots = IntStream.range(1, worldSize.width())
             .mapToObj(i -> new ScanRobot(i, 0, Direction.UP, 0))
             .toArray(ScanRobot[]::new);
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 

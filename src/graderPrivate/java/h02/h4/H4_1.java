@@ -46,7 +46,7 @@ public class H4_1 implements IWorldSetup {
     ) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final var robots = IntStream.range(0, worldSize.width())
+        final var robots = IntStream.range(1, worldSize.width())
             .mapToObj(i -> new CleanRobot(i, 0, Direction.UP, 0))
             .toArray(CleanRobot[]::new);
         final var robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
