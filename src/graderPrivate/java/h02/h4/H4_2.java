@@ -38,7 +38,7 @@ public class H4_2 implements IWorldSetup {
             .toArray(ScanRobot[]::new);;
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -96,7 +96,7 @@ public class H4_2 implements IWorldSetup {
             .toArray(ScanRobot[]::new);;
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -127,7 +127,7 @@ public class H4_2 implements IWorldSetup {
                 final var finalX = x;
 
                 try {
-                    final var expected = y != 0 && coins[y][x] > 0;
+                    final var expected = coins[y][x] > 0;
                     Assertions2.assertEquals(
                         expected,
                         result[y][x],
@@ -156,7 +156,7 @@ public class H4_2 implements IWorldSetup {
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -241,7 +241,7 @@ public class H4_2 implements IWorldSetup {
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -306,7 +306,7 @@ public class H4_2 implements IWorldSetup {
         final ScanRobot[] robotsReferenceCopy = Arrays.copyOf(robots, robots.length);
         final Direction direction = Direction.UP;
         final Random random = TestUtils.random(worldSize);
-        final int[][] coins = IntStream.range(1, worldSize.height()).sequential()
+        final int[][] coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 

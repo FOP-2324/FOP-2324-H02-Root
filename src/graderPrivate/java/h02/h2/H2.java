@@ -39,7 +39,7 @@ public class H2 implements IWorldSetup {
 
         final var random = TestUtils.random(worldSize);
 
-        final var coins = IntStream.range(1, worldSize.height()).sequential()
+        final var coins = IntStream.range(0, worldSize.height()).sequential()
             .mapToObj(x -> random.ints(worldSize.width(), 0, 5).toArray())
             .toArray(int[][]::new);
 
@@ -81,6 +81,6 @@ public class H2 implements IWorldSetup {
      * @return A string representing the coins array
      */
     private String stringifyCoinGrid(final int[][] coins) {
-        return Arrays.deepToString(coins);
+      return Arrays.deepToString(coins);
     }
 }

@@ -45,7 +45,7 @@ public class H4_3 implements IWorldSetup {
     private static void testPickedUpCoinAmounts(final TestUtils.WorldSize worldSize, final boolean exact) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
-        final CleanRobot[] robots = IntStream.range(0, worldSize.height())
+        final CleanRobot[] robots = IntStream.range(1, worldSize.height())
             .mapToObj(i -> new CleanRobot(0, i, Direction.RIGHT, 0))
             .toArray(CleanRobot[]::new);
         final Direction direction = Direction.RIGHT;
@@ -77,7 +77,7 @@ public class H4_3 implements IWorldSetup {
                 final var finalX = x;
 
                 final var coinsOnField = TestUtils.getCoinsOnField(x, y);
-                final var expected = x != 0 && coins[y][x] > 0;
+                final var expected = coins[y][x] > 0;
 
                 if (exact) {
                     Assertions2.assertEquals(
@@ -180,7 +180,8 @@ public class H4_3 implements IWorldSetup {
     }
 
     @ParameterizedTest
-    @MethodSource("h02.TestUtils#allWorldSizes")    public void testSpinRobotsUsage(final TestUtils.WorldSize worldSize) {
+    @MethodSource("h02.TestUtils#allWorldSizes")
+    public void testSpinRobotsUsage(final TestUtils.WorldSize worldSize) {
         TestUtils.setWorldSizeAndActionLimit(worldSize.width(), worldSize.height());
 
         final CleanRobot[] robots = IntStream.range(1, worldSize.height())
@@ -196,7 +197,7 @@ public class H4_3 implements IWorldSetup {
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
         final boolean[][] coinPositions = getCoinPositions(coins);
-        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots,  worldSize.width(), worldSize.height());
+        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldSize.width(), worldSize.height());
         final var secondEdgePositions = H4Utils.getEndOfWorldPositions(
             firstEdgePositions,
             Direction.values()[(direction.ordinal() + 2) % 4],
@@ -282,7 +283,7 @@ public class H4_3 implements IWorldSetup {
         H4Utils.initRobotsAndWorld(robots, direction, coins);
 
         final boolean[][] coinPositions = getCoinPositions(coins);
-        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots,  worldSize.width(), worldSize.height());
+        final var firstEdgePositions = H4Utils.getEndOfWorldRobotPositions(robots, worldSize.width(), worldSize.height());
 
         final var context = Assertions2.contextBuilder()
             .add("worldWidth", worldSize.width())
